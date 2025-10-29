@@ -71,5 +71,8 @@ vite.config.ts.timestamp-*
 .vscode/
 .idea/
 
+# Markdown files
+*.md
+
 # Project specific
 # Add any project-specific files or directories you want to ignore
