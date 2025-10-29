@@ -1,0 +1,1133 @@
+/* Header styles */
+:root {
+  --primary-blue: #1a4b8c;
+  --primary-hover: #2a5c9c;
+  --text-light: #f8f9fa;
+  --text-muted: rgba(255, 255, 255, 0.85);
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  background-color: var(--primary-blue);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 70px; /* Giảm từ 120px xuống 70px */
+}
+
+.header-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5rem 1rem; /* Giảm từ 1rem 2rem xuống 0.5rem 1rem */
+  margin: 0 auto;
+  min-height: 70px; /* Giảm từ 120px xuống 70px */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 50px; /* Giảm từ 60px xuống 50px */
+  padding: 0 0.5rem; /* Giảm từ 0 1rem xuống 0 0.5rem */
+  flex-wrap: nowrap;
+}
+
+.mobile-menu-toggle {
+  flex: 0 0 auto;
+  margin-right: 16px;
+}
+
+.mobile-menu-toggle button {
+  background: transparent;
+  border: none;
+  color: white;
+  width: 28px; /* Giảm từ 32px xuống 28px */
+  height: 28px; /* Giảm từ 32px xuống 28px */
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-logo {
+  flex: 0 1 auto;
+  margin-right: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Logo Styles */
+.header-logo .logo-button {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  gap: 1rem;
+}
+
+/* Search input styles */
+input[type="search"] {
+  width: 150px; /* Giảm từ 180px xuống 150px */
+  height: 28px; /* Giảm từ 32px xuống 28px */
+  padding: 0 10px; /* Giảm từ 0 12px xuống 0 10px */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 13px; /* Giảm từ 14px xuống 13px */
+  flex: 0 0 auto;
+}
+
+input[type="search"]::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.search-wrapper {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .header-top {
+    gap: 0.75rem; /* Giảm từ 1rem xuống 0.75rem */
+  }
+  
+  input[type="search"] {
+    max-width: 140px; /* Giảm từ 160px xuống 140px */
+    padding: 3px 6px; /* Giảm từ 4px 8px xuống 3px 6px */
+    font-size: 12px; /* Giảm từ 13px xuống 12px */
+  }
+}
+
+/* Mobile menu styles */
+.mobile-menu-toggle {
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .header-logo {
+    left: 60px;
+    transform: none;
+  }
+}
+
+.logo-icon {
+  width: 32px; /* Giảm từ 48px xuống 32px */
+  height: 32px; /* Giảm từ 48px xuống 32px */
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.logo-icon svg {
+  width: 18px; /* Giảm từ 24px xuống 18px */
+  height: 18px; /* Giảm từ 24px xuống 18px */
+  display: block;
+  margin: auto;
+}
+
+/* Tablet responsive fixes */
+@media (max-width: 768px) {
+  .header-logo .logo-button {
+    gap: 0.4rem; /* Giảm từ 0.5rem xuống 0.4rem */
+  }
+
+  .logo-icon {
+    width: 28px; /* Giảm từ 40px xuống 28px */
+    height: 28px; /* Giảm từ 40px xuống 28px */
+  }
+
+  .logo-icon svg {
+    width: 16px; /* Giảm từ 20px xuống 16px */
+    height: 16px; /* Giảm từ 20px xuống 16px */
+  }
+
+  .logo-text h1 {
+    font-size: 0.9rem; /* Giảm từ 1rem xuống 0.9rem */
+  }
+
+  .logo-text small {
+    font-size: 0.65rem; /* Giảm từ 0.75rem xuống 0.65rem */
+  }
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo-text h1 {
+  font-size: 0.9rem; /* Giảm từ 1rem xuống 0.9rem */
+  margin: 0;
+  line-height: 1.1; /* Giảm từ 1.2 xuống 1.1 */
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.logo-text small {
+  font-size: 0.65rem; /* Giảm từ 0.75rem xuống 0.65rem */
+  opacity: 0.85;
+  display: block;
+  white-space: nowrap;
+}
+
+.logo-icon {
+  width: 30px; /* Giảm từ 36px xuống 30px */
+  height: 30px; /* Giảm từ 36px xuống 30px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  margin-right: 6px; /* Giảm từ 8px xuống 6px */
+  flex-shrink: 0;
+}
+
+.auth-buttons {
+  display: flex !important;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+  height: 100%;
+}
+
+.auth-buttons .btn {
+  min-width: 100px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  padding: 0.5rem 1rem;
+  white-space: nowrap;
+  border-radius: 6px;
+  border: 2px solid transparent;
+}
+
+/* Login button - outline style */
+.auth-buttons .btn-outline-light {
+  background-color: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  color: white;
+}
+
+.auth-buttons .btn-outline-light:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: white;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Register button - solid style */
+.auth-buttons .btn-light {
+  background-color: white;
+  border: 2px solid white;
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+.auth-buttons .btn-light:hover {
+  background-color: #f8fafc;
+  border-color: #f8fafc;
+  color: #1e3a8a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+
+
+/* Ensure search container in nav is properly aligned */
+.search-container-header {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* Mobile menu styles */
+@media (max-width: 991.98px) {
+  .mobile-auth-buttons {
+    display: block;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+
+
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+  display: none;
+  z-index: 1001;
+}
+
+/* Mobile controls row - hidden by default, shown on mobile/tablet */
+.mobile-controls-row {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .mobile-controls-row {
+    display: flex;
+  }
+}
+
+/* Main Navigation */
+.main-nav {
+  background-color: var(--primary-blue);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  display: block !important;
+}
+
+/* Hide main nav by default on small screens */
+@media (max-width: 991.98px) {
+  .main-nav {
+    display: none !important;
+  }
+  
+  /* Show when menu is open */
+  .main-nav.mobile-open {
+    display: block !important;
+  }
+}
+
+/* Desktop specific styles */
+@media (min-width: 992px) {
+  /* Ensure nav is visible on desktop */
+  .main-nav {
+    display: block !important;
+  }
+  
+  /* Hide mobile controls on desktop */
+  .mobile-controls-row {
+    display: none !important;
+  }
+  
+  .mobile-menu-toggle {
+    display: none !important;
+  }
+}
+
+.nav-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Navigation Menu */
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 60px;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 100%;
+}
+
+/* Right side container for search and auth buttons */
+.nav-right {
+  display: flex !important;
+  align-items: center;
+  margin-left: auto;
+  gap: 1rem;
+  height: 100%;
+}
+
+/* Search container in nav */
+.search-container-header {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Navigation items */
+.nav-menu-item {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navigation links */
+.nav-menu-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  position: relative;
+  height: 100%;
+}
+
+.nav-menu-link:hover {
+  color: var(--text-light);
+  background-color: var(--primary-hover);
+}
+
+/* Active state for links */
+.nav-menu-link.active {
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* Auth links section */
+.auth-links {
+  margin-left: auto;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0;
+}
+
+/* Register link specific */
+.register-link {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  margin-left: 0.5rem;
+}
+
+.register-link:hover {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Icons in nav */
+.nav-menu-link svg {
+  margin-right: 8px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Mobile menu */
+.mobile-menu-close {
+  display: none;
+  padding: 15px;
+  text-align: right;
+}
+
+/* Mobile Auth Buttons */
+.mobile-auth-buttons {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 1rem;
+}
+
+.mobile-auth-buttons .btn {
+  width: 100%;
+  padding: 0.6rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+/* Tablet styles (768px - 991px) - Cải thiện cho header thu gọn */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .header {
+    padding: 0;
+    min-height: 65px; /* Giảm từ 70px xuống 65px cho tablet */
+  }
+  
+  .header-container {
+    padding: 0.6rem 1rem; /* Giảm từ 1rem 1.5rem */
+    min-height: 65px; /* Phù hợp với header */
+  }
+  
+  /* Header top - Logo left aligned on tablet */
+  .header-top {
+    justify-content: flex-start;
+    margin-bottom: 0.6rem; /* Giảm từ 1rem */
+    min-height: 40px; /* Giảm từ 50px xuống 40px */
+    padding: 0 0.3rem; /* Giảm từ 0 0.5rem */
+  }
+  
+  .header-logo {
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .logo-icon {
+    width: 36px; /* Giảm từ 40px xuống 36px */
+    height: 36px;
+    margin-right: 0.6rem; /* Giảm từ 0.85rem */
+  }
+  
+  .logo-icon svg {
+    width: 24px; /* Giảm từ 30px xuống 24px */
+    height: 24px;
+  }
+  
+  .logo-text h1 {
+    font-size: 1.1rem; /* Giảm từ 1.15rem xuống 1.1rem */
+    line-height: 1.2; /* Giảm từ 1.3 */
+    margin-bottom: 0;
+  }
+  
+  .logo-text small {
+    font-size: 0.7rem; /* Giảm từ 0.75rem xuống 0.7rem */
+    line-height: 1.1;
+  }
+  
+  /* Mobile controls row - hamburger + search on tablet */
+  .mobile-controls-row {
+    display: flex !important;
+    align-items: center;
+    gap: 0.6rem; /* Giảm từ 1rem */
+    width: 100%;
+    min-height: 30px; /* Thêm min-height */
+  }
+  
+  .mobile-menu-toggle {
+    display: flex !important;
+    flex-shrink: 0;
+  }
+  
+  .mobile-menu-toggle button {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    padding: 0.5rem; /* Giảm từ 0.65rem */
+    cursor: pointer;
+    border-radius: 4px; /* Giảm từ 6px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    width: 36px; /* Giảm từ 44px xuống 36px */
+    height: 36px;
+  }
+  
+  .mobile-menu-toggle button svg {
+    width: 18px; /* Giảm từ 20px */
+    height: 18px;
+  }
+  
+  .mobile-menu-toggle button:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+  
+  /* Search bar on tablet - wider and more prominent */
+  .mobile-search {
+    flex: 1;
+    max-width: 420px; /* Giảm từ 500px */
+  }
+  
+  .search-container-mobile {
+    position: relative;
+    width: 100%;
+  }
+  
+  .search-container-mobile input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.5rem 2.5rem 0.5rem 1rem; /* Giảm từ 0.7rem 3rem 0.7rem 1.25rem */
+    border-radius: 4px; /* Giảm từ 6px */
+    font-size: 0.85rem; /* Giảm từ 0.95rem */
+    transition: all 0.2s;
+    height: 36px; /* Đặt height cố định */
+  }
+  
+  .search-container-mobile input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+  }
+  
+  .search-container-mobile input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  .search-container-mobile button {
+    position: absolute;
+    right: 8px; /* Giảm từ 12px */
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    padding: 0.3rem; /* Giảm từ 0.4rem */
+  }
+  
+  .search-container-mobile button svg {
+    width: 16px; /* Giảm từ 18px */
+    height: 16px;
+  }
+  
+  /* Điều chỉnh main content padding cho tablet */
+  .main-content {
+    padding-top: 45px; /* Giảm từ 50px xuống 45px cho tablet */
+    min-height: calc(100vh - 45px);
+  }
+}
+
+.mobile-auth-buttons {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 1rem;
+}
+
+.mobile-auth-buttons .btn {
+  width: 100%;
+  padding: 0.6rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+/* Tablet auth buttons - larger */
+@media (min-width: 768px) {
+  .mobile-auth-buttons {
+    padding: 1.25rem 1.75rem;
+    gap: 0.85rem;
+  }
+  
+  .mobile-auth-buttons .btn {
+    padding: 0.85rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Nav right container - hide in mobile */
+.main-nav .nav-right {
+  display: none;
+}
+
+/* Main nav border - hide on mobile/tablet */
+.main-nav {
+  border-top: none;
+}
+}
+
+/* Extra small devices */
+@media (max-width: 575.98px) {
+  .header-container {
+    padding: 0.6rem 0.75rem;
+  }
+  
+  .header-top {
+    margin-bottom: 0.6rem;
+  }
+  
+  .logo-icon {
+    width: 42px;
+    height: 42px;
+    margin-right: 0.5rem;
+  }
+  
+  .logo-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .logo-text h1 {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  
+  .logo-text small {
+    font-size: 0.6rem;
+  }
+  
+  .mobile-controls-row {
+    gap: 0.5rem;
+  }
+  
+  .mobile-menu-toggle button {
+    padding: 0.4rem;
+  }
+  
+  .search-container-mobile input {
+    padding: 0.45rem 2.5rem 0.45rem 0.65rem;
+    font-size: 0.8rem;
+  }
+  
+  /* Mobile menu adjustments for small screens */
+  .main-nav {
+    width: 85%;
+    max-width: 280px;
+  }
+  
+  .nav-menu-link {
+    padding: 0.9rem 1.25rem !important;
+    font-size: 0.85rem;
+  }
+  
+  .mobile-auth-buttons {
+    padding: 1rem 1.25rem;
+  }
+  
+  .mobile-auth-buttons .btn {
+    padding: 0.65rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Extra small devices (320px - 480px) */
+@media (max-width: 480px) {
+  .header {
+    min-height: 55px; /* Giảm thêm cho màn hình rất nhỏ */
+  }
+  
+  .header-container {
+    padding: 0.3rem 0.5rem; /* Giảm padding thêm */
+    min-height: 55px;
+  }
+  
+  .header-top {
+    min-height: 30px; /* Giảm thêm */
+    margin-bottom: 0.4rem;
+  }
+  
+  .logo-icon {
+    width: 24px; /* Giảm thêm */
+    height: 24px;
+    margin-right: 0.4rem;
+  }
+  
+  .logo-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .logo-text h1 {
+    font-size: 0.8rem; /* Giảm thêm */
+  }
+  
+  .logo-text small {
+    font-size: 0.6rem; /* Giảm thêm */
+  }
+  
+  .mobile-controls-row {
+    gap: 0.3rem; /* Giảm gap thêm */
+    min-height: 22px;
+  }
+  
+  .mobile-menu-toggle button {
+    width: 24px; /* Giảm thêm */
+    height: 24px;
+    padding: 0.25rem;
+  }
+  
+  .mobile-menu-toggle button svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .search-container-mobile input {
+    height: 24px; /* Giảm thêm */
+    font-size: 0.7rem;
+    padding: 0.25rem 1.6rem 0.25rem 0.4rem;
+  }
+  
+  .search-container-mobile button svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  /* Main content padding cho màn hình rất nhỏ */
+  .main-content {
+    padding-top: 35px;
+    min-height: calc(100vh - 35px);
+  }
+}
+
+/* Large tablets and small laptops (992px - 1200px) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .header-container {
+    padding: 0.8rem 1.5rem; /* Điều chỉnh cho laptop nhỏ */
+  }
+  
+  .nav-container {
+    padding: 0 1.5rem; /* Điều chỉnh padding nav */
+  }
+  
+  .nav-menu-link {
+    padding: 1rem 1rem; /* Giảm padding cho nav links */
+    font-size: 0.9rem;
+  }
+  
+  .auth-buttons .btn {
+    min-width: 90px; /* Giảm width buttons */
+    font-size: 0.75rem;
+    padding: 0.35rem 0.7rem;
+  }
+}
+
+/* Very large screens (1400px+) */
+@media (min-width: 1400px) {
+  .header-container {
+    max-width: 1400px; /* Giới hạn max-width */
+    margin: 0 auto;
+  }
+  
+  .nav-container {
+    max-width: 1400px;
+    padding: 0 2.5rem; /* Tăng padding cho màn hình lớn */
+  }
+}
+
+/* Mobile menu overlay */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* Main content padding to prevent content from being hidden behind fixed header */
+.main-content {
+  padding-top: 50px; /* Giảm từ 80px xuống 50px để phù hợp với header nhỏ hơn */
+  min-height: calc(100vh - 50px); /* Giảm từ 80px xuống 50px */
+  position: relative;
+  z-index: 1;
+}
+
+/* Mobile styles (< 768px) - Cải thiện cho header thu gọn */
+@media (max-width: 767.98px) {
+  .header {
+    padding: 0;
+    min-height: 60px; /* Giảm từ 70px xuống 60px cho mobile */
+  }
+  
+  .header-container {
+    padding: 0.4rem 0.75rem; /* Giảm từ 0.75rem 1rem */
+    min-height: 60px; /* Phù hợp với header */
+  }
+  
+  /* Header top - Logo centered on mobile */
+  .header-top {
+    justify-content: center;
+    margin-bottom: 0.5rem; /* Giảm từ 0.75rem */
+    min-height: 35px; /* Giảm từ 50px xuống 35px */
+    padding: 0 0.25rem; /* Giảm từ 0 0.5rem */
+  }
+  
+  .header-logo {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .logo-icon {
+    width: 28px; /* Giảm từ 32px xuống 28px */
+    height: 28px;
+    margin-right: 0.5rem; /* Giảm từ 0.75rem */
+  }
+  
+  .logo-icon svg {
+    width: 20px; /* Giảm từ 24px xuống 20px */
+    height: 20px;
+  }
+  
+  .logo-text h1 {
+    font-size: 0.9rem; /* Giảm từ 1.3rem xuống 0.9rem */
+    line-height: 1.2;
+    margin-bottom: 0;
+  }
+  
+  .logo-text small {
+    font-size: 0.65rem; /* Giảm từ 0.8rem xuống 0.65rem */
+    line-height: 1.1;
+  }
+  
+  /* Mobile controls row - hamburger + search */
+  .mobile-controls-row {
+    display: flex !important;
+    align-items: center;
+    gap: 0.4rem; /* Giảm từ 0.5rem */
+    width: 100%;
+    min-height: 25px; /* Thêm min-height để đảm bảo không quá nhỏ */
+  }
+  
+  .mobile-menu-toggle {
+    display: flex !important;
+    flex-shrink: 0;
+  }
+  
+  .mobile-menu-toggle button {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 0.3rem; /* Giảm từ 0.4rem */
+    cursor: pointer;
+    border-radius: 3px; /* Giảm từ 4px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    width: 26px; /* Giảm từ 32px xuống 26px */
+    height: 26px;
+  }
+  
+  .mobile-menu-toggle button svg {
+    width: 16px; /* Giảm từ 18px */
+    height: 16px;
+  }
+  
+  .mobile-menu-toggle button:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Mobile search bar - expands to fill space */
+  .mobile-search {
+    flex: 1;
+  }
+  
+  .search-container-mobile {
+    position: relative;
+    width: 100%;
+  }
+  
+  .search-container-mobile input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    padding: 0.3rem 1.8rem 0.3rem 0.5rem; /* Giảm padding */
+    border-radius: 3px; /* Giảm từ 4px */
+    font-size: 0.75rem; /* Giảm từ 0.8rem */
+    height: 26px; /* Đặt height cố định */
+  }
+  
+  .search-container-mobile input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.75rem;
+  }
+  
+  .search-container-mobile input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .search-container-mobile button {
+    position: absolute;
+    right: 4px; /* Giảm từ 6px */
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    padding: 0.15rem; /* Giảm từ 0.2rem */
+  }
+  
+  .search-container-mobile button svg {
+    width: 14px; /* Giảm từ 18px xuống 14px */
+    height: 14px;
+  }
+  
+  /* Điều chỉnh main content padding cho mobile */
+  .main-content {
+    padding-top: 40px; /* Giảm từ 50px xuống 40px cho mobile */
+    min-height: calc(100vh - 40px);
+  }
+}
+
+/* Mobile Navigation Menu - both tablet and mobile */
+@media (max-width: 991.98px) {
+  .main-nav {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100vh;
+    width: 70%;
+    max-width: 350px;
+    transition: left 0.3s ease;
+    z-index: 1100;
+    overflow-y: auto;
+    padding-top: 0;
+    background-color: var(--primary-blue);
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Tablet specific menu width */
+  @media (min-width: 768px) {
+    .main-nav {
+      width: 50%;
+      max-width: 380px;
+    }
+  }
+  
+  .main-nav.mobile-open {
+    left: 0;
+  }
+  
+  /* Mobile menu header with close button */
+  .mobile-menu-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .mobile-menu-close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  
+  .mobile-menu-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Navigation container in mobile */
+  .main-nav .nav-container {
+    display: block;
+    padding: 0;
+    height: auto;
+  }
+  
+  /* Navigation menu items */
+  .nav-menu {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    height: auto;
+    overflow-y: visible;
+  }
+  
+  .nav-menu-item {
+    margin: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-menu-link {
+    padding: 1rem 1.5rem !important;
+    width: 100%;
+    border-radius: 0;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-menu-link svg {
+    margin-right: 0.75rem;
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Tablet menu items - larger text */
+  @media (min-width: 768px) {
+    .nav-menu-link {
+      padding: 1.1rem 1.75rem !important;
+      font-size: 0.95rem;
+    }
+    
+    .nav-menu-link svg {
+      width: 22px;
+      height: 22px;
+      margin-right: 1rem;
+    }
+  }
+
+  /* Hide desktop search in mobile menu */
+  .main-nav .search-container-header {
+    display: none;
+  }
+  
+  /* Mobile auth buttons in sidebar */
+  .mobile-auth-buttons {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.5rem;
+    gap: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 1rem;
+  }
+  
+  .mobile-auth-buttons .btn {
+    width: 100%;
+    padding: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Tablet auth buttons - larger */
+  @media (min-width: 768px) {
+    .mobile-auth-buttons {
+      padding: 1.25rem 1.75rem;
+      gap: 0.85rem;
+    }
+    
+    .mobile-auth-buttons .btn {
+      padding: 0.85rem;
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* Nav right container - hide in mobile */
+  .main-nav .nav-right {
+    display: none;
+  }
+  
+  /* Main nav border - hide on mobile/tablet */
+  .main-nav {
+    border-top: none;
+  }
+}
