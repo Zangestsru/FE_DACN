@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuthContext } from '@/contexts';
 import { useRegister } from '@/hooks';
 import './Register.css';
+import backgroundImage from '/images/background.png';
 
 interface RegisterProps {
   onBackToHome: () => void;
@@ -75,7 +76,7 @@ export const Register: React.FC<RegisterProps> = ({ onBackToHome, onOTPRequest, 
       <style>{`
         .register-fullscreen-bg {
           background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%), 
-                      url("/images/background.png");
+                      url("${backgroundImage}");
           background-size: cover;
           background-position: center;
           background-attachment: fixed;

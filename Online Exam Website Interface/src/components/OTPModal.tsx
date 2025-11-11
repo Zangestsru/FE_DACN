@@ -4,7 +4,7 @@ interface OTPModalProps {
   type: string;
   contact: string;
   onClose: () => void;
-  onVerify: () => void;
+  onVerify: (code: string) => void;
 }
 
 export const OTPModal: React.FC<OTPModalProps> = ({ type, contact, onClose, onVerify }) => {
@@ -51,7 +51,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({ type, contact, onClose, onVe
   const handleVerify = () => {
     const code = otpCode.join('');
     if (code.length === 6) {
-      onVerify();
+      onVerify(code);
     }
   };
 
