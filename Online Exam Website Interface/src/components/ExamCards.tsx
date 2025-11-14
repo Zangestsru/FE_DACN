@@ -22,7 +22,7 @@ const ExamCard: React.FC<ExamCardProps> = ({ title, subject, time, questionCount
   };
 
   return (
-    <div className="col-md-3 col-6 mb-4">
+    <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
       <div className="card h-100 shadow-sm border-0">
         <div className="position-relative">
           <img 
@@ -35,21 +35,21 @@ const ExamCard: React.FC<ExamCardProps> = ({ title, subject, time, questionCount
             {difficulty}
           </span>
         </div>
-        <div className="card-body">
-          <h6 className="card-title fw-bold text-truncate" title={title}>{title}</h6>
-          <p className="card-text small text-muted mb-1">
+        <div className="card-body p-3">
+          <h6 className="card-title fw-bold text-truncate mb-2" title={title}>{title}</h6>
+          <p className="card-text small text-muted mb-2">
             <i className="bi bi-book me-1"></i> {subject}
           </p>
-          <div className="d-flex justify-content-between align-items-center">
-            <span className="badge bg-light text-dark">
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-1">
+            <span className="badge bg-light text-dark small">
               <i className="bi bi-clock me-1"></i> {time} phút
             </span>
-            <span className="badge bg-light text-dark">
+            <span className="badge bg-light text-dark small">
               {questionCount} câu
             </span>
           </div>
         </div>
-        <div className="card-footer bg-white border-0 pt-0">
+        <div className="card-footer bg-white border-0 pt-0 p-3">
           <button className="btn btn-primary btn-sm w-100">
             Đăng Ký Ngay
           </button>
@@ -76,8 +76,8 @@ const ExamCards: React.FC = () => {
 
   return (
     <section className="py-4 bg-light">
-      <div className="container">
-        <h4 className="mb-4 fw-bold">Đề thi nổi bật</h4>
+      <div className="container-fluid px-3 px-md-4">
+        <h4 className="mb-4 fw-bold text-center text-md-start">Đề thi nổi bật</h4>
         
         {/* Loading State */}
         {loading && (

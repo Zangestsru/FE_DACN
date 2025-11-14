@@ -1,0 +1,395 @@
+/* ExamTaking Component Styles */
+
+/* Info Cards Grid */
+.info-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.exam-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.exam-sidebar {
+  background: #f8f9fa;
+  border-right: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+}
+
+.exam-sidebar.collapsed {
+  width: 60px !important;
+  min-width: 60px !important;
+}
+
+.exam-sidebar.collapsed .sidebar-content {
+  display: none;
+}
+
+.exam-sidebar.collapsed .toggle-btn {
+  transform: rotate(180deg);
+}
+
+.exam-main-content {
+  background: #f5f6fa;
+  min-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.question-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.question-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  border: 2px solid #dee2e6;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.question-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.question-btn.answered {
+  background: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+}
+
+.question-btn.flagged {
+  background: #fff3cd;
+  border-color: #ffc107;
+  color: #856404;
+}
+
+.question-btn.current {
+  background: #007bff;
+  border-color: #007bff;
+  color: white;
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+}
+
+.timer-display {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(255,107,107,0.3);
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+.progress-ring-circle {
+  transition: stroke-dashoffset 0.35s;
+  transform-origin: 50% 50%;
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: -15px;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.toggle-btn:hover {
+  background: #f8f9fa;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 991.98px) {
+  .exam-taking-container {
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100vh;
+    overflow: visible !important;
+  }
+
+  .exam-taking-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding-bottom: 160px; /* Space for fixed bottom nav */
+  }
+
+  .exam-taking-main {
+    padding: 1rem !important;
+    margin-left: 0 !important;
+  }
+
+  /* Mobile top bar improvements */
+  .mobile-top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    background: white;
+    border-bottom: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* Mobile bottom navigation */
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #e9ecef;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 1020;
+    padding: 1rem;
+  }
+
+  /* Mobile question grid */
+  #mobileQuestionGrid {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  #mobileQuestionGrid .btn {
+    min-height: 32px;
+    font-size: 11px;
+  }
+}
+
+/* Tablet Responsive Design */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .exam-taking-container {
+    flex-direction: column !important;
+  }
+
+  .exam-taking-content {
+    margin-left: 0 !important;
+    padding-bottom: 120px;
+  }
+
+  .exam-taking-main {
+    padding: 1.5rem !important;
+  }
+
+  /* Larger buttons for tablet */
+  .mobile-bottom-nav .btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Small Mobile Responsive Design */
+@media (max-width: 575.98px) {
+  .exam-taking-main {
+    padding: 0.75rem !important;
+  }
+
+  .mobile-bottom-nav {
+    padding: 0.75rem;
+  }
+
+  .mobile-bottom-nav .btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  /* Smaller question grid buttons */
+  #mobileQuestionGrid .btn {
+    min-height: 28px;
+    font-size: 10px;
+    padding: 2px;
+  }
+
+  /* Adjust option cards for small screens */
+  .exam-taking-main .border.rounded {
+    padding: 0.75rem !important;
+    min-height: 45px !important;
+  }
+
+  .exam-taking-main .form-check-label {
+    font-size: 13px !important;
+  }
+}
+
+/* Legacy responsive styles for compatibility */
+@media (max-width: 768px) {
+  .exam-container {
+    padding: 0.5rem;
+  }
+
+  .exam-header {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .exam-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .exam-header .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .timer-display {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+
+  .info-cards-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, auto);
+    gap: 0.75rem;
+  }
+
+  .info-card {
+    padding: 1rem;
+  }
+
+  .info-card h3 {
+    font-size: 0.9rem;
+  }
+
+  .exam-sidebar {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    height: calc(100vh - 80px);
+    z-index: 1000;
+    transform: translateX(-100%);
+    width: 100%;
+  }
+  
+  .exam-sidebar.show {
+    transform: translateX(0);
+  }
+  
+  .exam-main-content {
+    margin-left: 0 !important;
+    padding: 1rem;
+  }
+  
+  .question-grid {
+    grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
+    gap: 0.25rem;
+  }
+  
+  .question-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 0.8rem;
+  }
+
+  .bottom-navigation {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .nav-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-cards-grid {
+    gap: 0.5rem;
+  }
+
+  .info-card {
+    padding: 0.75rem;
+  }
+
+  .exam-header {
+    padding: 10px 15px !important;
+  }
+  
+  .exam-header h5 {
+    font-size: 16px !important;
+  }
+  
+  .timer-display {
+    padding: 10px;
+  }
+  
+  .question-grid {
+    grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
+    gap: 6px;
+  }
+  
+  .question-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 0.7rem;
+  }
+}
+
+/* Landscape orientation fixes for mobile */
+@media (max-width: 991.98px) and (orientation: landscape) {
+  .mobile-bottom-nav {
+    padding: 0.5rem;
+  }
+
+  .mobile-bottom-nav .btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .exam-taking-content {
+    padding-bottom: 100px;
+  }
+}
+
+/* Safe area insets for modern mobile devices */
+@supports (padding: max(0px)) {
+  .mobile-bottom-nav {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .mobile-top-bar,
+  .mobile-bottom-nav {
+    background: #1a1a1a;
+    border-color: #333;
+    color: white;
+  }
+
+  .exam-taking-main {
+    background: #121212;
+    color: white;
+  }
+
+  .border.rounded {
+    background: #2a2a2a !important;
+    border-color: #444 !important;
+    color: white !important;
+  }
+}
