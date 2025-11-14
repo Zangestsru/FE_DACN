@@ -2,7 +2,7 @@
 // Connected to API Gateway running on localhost:8000
 
 export const API_CONFIG = {
-  baseURL: 'http://localhost:8001/api',
+  baseURL: 'http://localhost:4000/api/v1',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

@@ -33,13 +33,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
         });
       }
     } catch (err) {
-      console.error('Login failed:', err);
+      // Swallow errors; hook handles state
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {loginError && (
+      {loginError && !needsVerification && (
         <div className="alert alert-danger mb-3" style={{ borderRadius: '8px', backgroundColor: '#fef2f2', color: '#dc2626', fontSize: '0.9rem', border: '1px solid #fecaca' }}>
           {loginError.message}
         </div>

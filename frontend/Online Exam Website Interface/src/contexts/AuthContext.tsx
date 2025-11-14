@@ -1,8 +1,3 @@
-/**
- * Auth Context
- * Global authentication state management
- * Provides user, token, and auth functions to entire app
- */
 
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { authService } from '@/services';

@@ -14,43 +14,18 @@
  * Authentication & Authorization Endpoints
  */
 export const AUTH_ENDPOINTS = {
-  // Đăng nhập
   LOGIN: '/auth/login',
-  
-  // Đăng ký
   REGISTER: '/auth/register',
-  
-  // Đăng xuất
   LOGOUT: '/auth/logout',
-  
-  // Refresh token
   REFRESH_TOKEN: '/auth/refresh',
-  
-  // Quên mật khẩu
   FORGOT_PASSWORD: '/auth/forgot-password',
-  
-  // Đặt lại mật khẩu
   RESET_PASSWORD: '/auth/reset-password',
-  
-  // Xác thực OTP
   VERIFY_OTP: '/auth/verify-otp',
-
-  // Xác thực OTP đăng nhập
   VERIFY_LOGIN_OTP: '/auth/verify-login-otp',
-  
-  // Gửi lại OTP
   RESEND_OTP: '/auth/resend-otp',
-  
-  // Đổi mật khẩu
   CHANGE_PASSWORD: '/auth/change-password',
-  
-  // Xác thực email
   VERIFY_EMAIL: '/auth/verify-email',
-  
-  // Google OAuth
   GOOGLE_LOGIN: '/auth/google',
-  
-  // Facebook OAuth
   FACEBOOK_LOGIN: '/auth/facebook',
 } as const;
 
@@ -60,8 +35,6 @@ export const AUTH_ENDPOINTS = {
  * User Management Endpoints
  */
 export const USER_ENDPOINTS = {
-  // Lấy thông tin user hiện tại
-  ME: '/users/me',
   
   // Cập nhật profile (bao gồm ngày sinh)
   UPDATE_PROFILE: '/users/profile',

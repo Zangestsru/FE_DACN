@@ -7,11 +7,11 @@ export default defineConfig({
     // Serve TailAdmin under /admin path when behind a reverse proxy
     base: "/admin/",
     server: {
-      port: 3002,
+      port: 3007,
       strictPort: true,
       // When accessed through a proxy gateway (single port), HMR needs to connect to the gateway port
       hmr: {
-        clientPort: 4000,
+        clientPort: 4002,
       },
     },
   plugins: [

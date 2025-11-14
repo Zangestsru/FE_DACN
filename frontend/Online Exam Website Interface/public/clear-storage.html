@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xóa Dữ Liệu Đăng Nhập Cũ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #d32f2f;
+            text-align: center;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #c82333;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            display: none;
+        }
+        .current-data {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Xóa Dữ Liệu Đăng Nhập Cũ</h1>
+        
+        <div class="warning">
+            <strong>⚠️ Cảnh báo:</strong> Trang này sẽ xóa toàn bộ dữ liệu đăng nhập cũ trong trình duyệt của bạn.
+            Hãy chỉ sử dụng khi gặp lỗi hiển thị sai thông tin người dùng.
+        </div>
+
+        <h3>Dữ liệu hiện tại trong localStorage:</h3>
+        <div id="currentData" class="current-data">
+            Đang kiểm tra...
+        </div>
+
+        <button onclick="clearAllStorage()">🗑️ Xóa Toàn Bộ Dữ Liệu Đăng Nhập</button>
+        <button onclick="clearUserDataOnly()">👤 Chỉ Xóa Thông Tin Người Dùng</button>
+        <button onclick="refreshDisplay()">🔄 Làm Mới Hiển Thị</button>
+
+        <div id="success" class="success">
+            <strong>✅ Thành công!</strong> Dữ liệu đã được xóa. Bạn có thể đăng nhập lại bình thường.
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="/" style="color: #007bff; text-decoration: none;">← Quay lại Trang Chủ</a>
+        </div>
+    </div>
+
+    <script>
+        // Các khóa lưu trữ trong ứng dụng
+        const STORAGE_KEYS = {
+            ACCESS_TOKEN: 'access_token',
+            REFRESH_TOKEN: 'refresh_token',
+            USER_INFO: 'user_info',
+            THEME: 'theme',
+            REGISTERED_USERS: 'registered_users'
+        };
+
+        function displayCurrentData() {
+            const data = {};
+            
+            // Lấy dữ liệu từ localStorage
+            Object.values(STORAGE_KEYS).forEach(key => {
+                const value = localStorage.getItem(key);
+                data[key] = value || '(trống)';
+            });
+
+            // Format hiển thị
+            const displayText = JSON.stringify(data, null, 2);
+            document.getElementById('currentData').textContent = displayText;
+        }
+
+        function clearAllStorage() {
+            if (confirm('Bạn có chắc chắn muốn xóa toàn bộ dữ liệu đăng nhập?')) {
+                try {
+                    // Xóa các khóa liên quan đến đăng nhập
+                    Object.values(STORAGE_KEYS).forEach(key => {
+                        localStorage.removeItem(key);
+                    });
+
+                    // Xóa thêm các khóa có thể có
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('currentUser');
+                    
+                    document.getElementById('success').style.display = 'block';
+                    displayCurrentData();
+                    
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
+                    
+                } catch (error) {
+                    alert('Lỗi khi xóa dữ liệu: ' + error.message);
+                }
+            }
+        }
+
+        function clearUserDataOnly() {
+            if (confirm('Bạn có chắc chắn muốn xóa thông tin người dùng?')) {
+                try {
+                    // Chỉ xóa thông tin người dùng, giữ lại theme và các cài đặt khác
+                    localStorage.removeItem(STORAGE_KEYS.USER_INFO);
+                    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+                    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('currentUser');
+                    
+                    document.getElementById('success').innerHTML = '<strong>✅ Thành công!</strong> Thông tin người dùng đã được xóa.';
+                    document.getElementById('success').style.display = 'block';
+                    displayCurrentData();
+                    
+                } catch (error) {
+                    alert('Lỗi khi xóa dữ liệu: ' + error.message);
+                }
+            }
+        }
+
+        function refreshDisplay() {
+            displayCurrentData();
+            document.getElementById('success').style.display = 'none';
+        }
+
+        // Hiển thị dữ liệu khi trang load
+        document.addEventListener('DOMContentLoaded', function() {
+            displayCurrentData();
+        });
+    </script>
+</body>
+</html>

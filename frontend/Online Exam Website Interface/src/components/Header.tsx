@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Header.css';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   onCertificationClick: () => void;
@@ -34,6 +35,7 @@ export const Header: React.FC<HeaderProps> = ({
   // State cho user dropdown
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { user, isAuthenticated, logout, refreshUser } = useAuth();
+  const navigate = useNavigate();
 
   // Hàm MỚI để bật/tắt menu di động
   const toggleMobileMenu = () => {
@@ -73,6 +75,13 @@ export const Header: React.FC<HeaderProps> = ({
       (user as any)?.roleId === 1 ||
       (user as any)?.RoleId === 1 ||
       (((user as any)?.roleName || (user as any)?.RoleName)?.toString()?.toLowerCase() === 'admin')
+    )
+  );
+
+  const isTeacherUser = !!(
+    isAuthenticated && (
+      (user?.role === 'teacher') ||
+      (((user as any)?.roleName || (user as any)?.RoleName)?.toString()?.toLowerCase() === 'teacher')
     )
   );
 
@@ -248,7 +257,7 @@ export const Header: React.FC<HeaderProps> = ({
                       <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/>
                     </svg>
                     <span style={{ fontWeight: 600 }}>
-                      {user?.fullName || user?.username || user?.email}
+                      {isAuthenticated ? (user?.fullName || user?.username || user?.email) : 'Người dùng'}
                     </span>
                   </button>
 
@@ -268,7 +277,7 @@ export const Header: React.FC<HeaderProps> = ({
                       >
                         <div className="card-body p-2">
                           <div className="px-2 py-2 text-muted small">
-                            Đã đăng nhập: {user?.email}
+                            Đã đăng nhập: {isAuthenticated ? user?.email : 'Chưa xác thực'}
                           </div>
                           <hr className="my-2" />
                           {isAdminUser && (
@@ -282,6 +291,15 @@ export const Header: React.FC<HeaderProps> = ({
                               }}
                             >
                               Quản trị
+                            </button>
+                          )}
+                          {isTeacherUser && (
+                            <button
+                              className="btn btn-link w-100 text-start"
+                              style={{ textDecoration: 'none' }}
+                              onClick={() => { navigate('/teacher/'); closeUserMenu(); }}
+                            >
+                              Quản lý
                             </button>
                           )}
                           {/* Các mục lịch sử */}
@@ -459,9 +477,14 @@ export const Header: React.FC<HeaderProps> = ({
                       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/>
                       </svg>
-                      <span>{user?.fullName || user?.username || user?.email}</span>
+                      <span>{isAuthenticated ? (user?.fullName || user?.username || user?.email) : 'Người dùng'}</span>
                     </div>
                     {/* Các mục lịch sử cho mobile */}
+                    {isTeacherUser && (
+                      <button className="btn btn-light w-100 mb-2" onClick={() => { navigate('/teacher/'); toggleMobileMenu(); }}>
+                        Quản lý
+                      </button>
+                    )}
                     <button className="btn btn-light w-100 mb-2" onClick={() => { onPaymentHistoryClick?.(); toggleMobileMenu(); }}>
                       Lịch sử thanh toán
                     </button>

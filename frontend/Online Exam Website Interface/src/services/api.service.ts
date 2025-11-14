@@ -15,12 +15,12 @@ import { AUTH_ENDPOINTS, STORAGE_KEYS } from '@/constants';
  * API Base URL - Lấy từ biến môi trường
  * Mặc định sử dụng localhost nếu không có biến môi trường
  */
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8001';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || window.location.origin;
 
 /**
  * API Version
  */
-export const API_VERSION = (import.meta.env.VITE_API_VERSION ?? 'v1').trim();
+export const API_VERSION = (import.meta.env.VITE_API_VERSION ?? '').trim();
 
 /**
  * Full API URL
@@ -207,7 +207,7 @@ apiClient.interceptors.response.use(
  * Xử lý khi token hết hạn hoặc không hợp lệ
  */
 const handleUnauthorized = () => {
-  // T?m th?i v� hi?u ho� auto-logout khi nh?n 401 �? tr�nh t? ��ng xu?t ngay sau khi ��ng nh?p.
+  // T?m th?i v� hi?u ho� auto-logout khi nh?n 401 �? tr�nh t? ��ng xu?t ngay sau khi ��ng nh?p.
   return;
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
@@ -221,7 +221,11 @@ const handleUnauthorized = () => {
  * Xử lý khi không có quyền truy cập
  */
 const handleForbidden = () => {
-  console.error('Access forbidden');
+  try {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/403';
+    }
+  } catch {}
 };
 
 // ==================== UTILITY FUNCTIONS ====================

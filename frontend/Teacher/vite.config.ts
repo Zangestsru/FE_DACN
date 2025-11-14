@@ -7,10 +7,10 @@ export default defineConfig({
     // Serve Teacher app under /teacher path when behind a reverse proxy
     base: "/teacher/",
     server: {
-      port: 3003,
+      port: 3006,
       strictPort: true,
       hmr: {
-        clientPort: 4000,
+        clientPort: 4002,
       },
     },
   plugins: [

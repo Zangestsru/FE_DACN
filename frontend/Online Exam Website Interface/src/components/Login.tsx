@@ -19,7 +19,7 @@ export const Login: React.FC<LoginProps> = ({
   onRegister 
 }) => {
   const [loginSuccess, setLoginSuccess] = useState(false);
-  const { needsVerification, verifyLoginOtp } = useAuth();
+  const { needsVerification, verifyLoginOtp, loginEmail } = useAuth();
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [pendingEmail, setPendingEmail] = useState<string>('');
   const [verifying, setVerifying] = useState<boolean>(false);
@@ -44,12 +44,13 @@ export const Login: React.FC<LoginProps> = ({
     try {
       setVerifying(true);
       setVerifyError(null);
-      const result = await verifyLoginOtp(pendingEmail, otp);
+      const emailToVerify = pendingEmail || loginEmail;
+      const result = await verifyLoginOtp(emailToVerify, otp);
       if (result && result.token) {
         // Thông báo cho các thành phần khác (Header) cập nhật trạng thái đăng nhập
         window.dispatchEvent(new CustomEvent('auth:logged-in'));
         setShowOtpModal(false);
-        console.log(`User ${pendingEmail} logged in successfully.`);
+        console.log(`User ${emailToVerify} logged in successfully.`);
         navigate('/');
       }
       setVerifying(false);
@@ -197,7 +198,7 @@ export const Login: React.FC<LoginProps> = ({
       {showOtpModal && (
         <OTPModal
           type="email"
-          contact={pendingEmail}
+          contact={pendingEmail || loginEmail}
           onClose={() => setShowOtpModal(false)}
           onVerify={handleOtpVerify}
           loading={verifying}

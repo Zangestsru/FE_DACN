@@ -4,7 +4,8 @@
  */
 
 import { apiClient, setAuthToken, removeAuthToken } from './api.service';
-import { AUTH_ENDPOINTS } from '@/constants/endpoints';
+import { userService } from './user.service';
+import { AUTH_ENDPOINTS, USER_ENDPOINTS } from '@/constants/endpoints';
 import { STORAGE_KEYS, SUCCESS_MESSAGES } from '@/constants';
 import type {
   ILoginRequest,
@@ -44,34 +45,92 @@ class AuthService {
    * @returns Promise với thông tin user và token
    */
   async login(email: string, password: string): Promise<ILoginResponse> {
-    const response = await apiClient.post<ILoginResponse>(
-      AUTH_ENDPOINTS.LOGIN,
-      { email, password }
-    );
+    try {
+      const res = await apiClient.post(AUTH_ENDPOINTS.LOGIN, { email, password });
+      const result: any = (res as any).data;
 
-    if (response.data.token) {
-      const { accessToken, refreshToken } = response.data.token;
+      // If backend returns success and user data with token (direct login)
+      if (result?.success && result?.data && result?.data?.accessToken) {
+        const { accessToken, refreshToken } = result.data;
 
-      setAuthToken(accessToken);
-      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken || '');
-      
-      if (response.data.user) {
-        localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(response.data.user));
+        setAuthToken(accessToken);
+        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken || '');
+        
+        let profile = null;
+        try {
+          profile = await userService.getUserProfile();
+        } catch {}
+        const userData = profile || result.data.user || null;
+        if (userData) {
+          localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(userData));
+        }
+
+        console.log('Login successful, token stored:', accessToken);
+
+        return {
+          user: userData,
+          token: {
+            accessToken,
+            refreshToken,
+            expiresIn: 3600,
+            tokenType: 'Bearer',
+          },
+          message: result.message || 'Login successful',
+        };
       }
 
-      return response.data;
-    }
+      // If backend requires OTP verification (status 200 but no token yet)
+      // Many backends respond 200 with only a message when OTP is sent
+      if ((res as any).status === 200 && (!result?.data?.accessToken)) {
+        const message = result?.message || 'Đã gửi OTP tới email. Vui lòng xác minh.';
+        console.log('OTP verification required:', message);
+        return {
+          requiresVerification: true,
+          message,
+          user: result?.data?.user || null,
+          token: {
+            accessToken: '',
+            refreshToken: '',
+            expiresIn: 0,
+            tokenType: 'Bearer',
+          },
+        };
+      }
 
-    // If no token, but a message is present, assume OTP is required
-    if (response.data.message) {
+      // Any 200 response without token is treated as OTP-verification-required
       return {
-        ...response.data,
         requiresVerification: true,
+        message: result?.message || 'Vui lòng xác minh OTP để tiếp tục',
+        user: result?.data?.user || null,
+        token: {
+          accessToken: '',
+          refreshToken: '',
+          expiresIn: 0,
+          tokenType: 'Bearer',
+        },
       };
-    }
 
-    return response.data;
+    } catch (error: any) {
+      const msg = error?.message || '';
+      if (msg.includes('OTP') || msg.toLowerCase().includes('xác minh')) {
+        return {
+          requiresVerification: true,
+          message: msg,
+          user: null,
+          token: {
+            accessToken: '',
+            refreshToken: '',
+            expiresIn: 0,
+            tokenType: 'Bearer',
+          },
+        } as ILoginResponse;
+      }
+      if (error?.code === 'ERR_NETWORK' || /Network|fetch/i.test(error?.message)) {
+        throw new Error(`Không thể kết nối máy chủ. Vui lòng kiểm tra Backend (${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001'})`);
+      }
+      throw new Error(error.message || 'Network error during login');
+    }
   }
 
   /**
@@ -85,20 +144,56 @@ class AuthService {
       AUTH_ENDPOINTS.VERIFY_LOGIN_OTP,
       { email, otp }
     );
+    const tokenData: any = (response as any)?.data?.token;
+    let accessToken = '';
+    let refreshToken = '';
+    if (typeof tokenData === 'string') {
+      accessToken = tokenData;
+    } else if (tokenData && typeof tokenData === 'object') {
+      accessToken = tokenData.accessToken || '';
+      refreshToken = tokenData.refreshToken || '';
+    }
 
-    if (response.data.token) {
-      const { accessToken, refreshToken } = response.data.token;
-
+    if (accessToken) {
       setAuthToken(accessToken);
       localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
       localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken || '');
+
+      try {
+        const payloadBase64 = accessToken.split('.')[1];
+        const payloadJson = atob(payloadBase64);
+        const payload = JSON.parse(payloadJson);
+        const sub = payload.sub || payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || payload.nameid;
+        const emailClaim = payload.email || payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"];
+        const name = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] || payload.name || '';
+        const role = payload.role || payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || 'student';
+        const user: IUser = {
+          id: typeof sub === 'string' ? sub : String(sub),
+          username: emailClaim ? String(emailClaim).split('@')[0] : '',
+          fullName: name,
+          email: emailClaim || email,
+          phone: '',
+          role: String(role).toLowerCase(),
+          avatar: '',
+          isVerified: true,
+          isActive: true,
+        } as IUser;
+        localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(user));
+      } catch {}
+
+      try {
+        const serverUser = await userService.getUserProfile();
+        if (serverUser) {
+          localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(serverUser));
+        }
+      } catch {}
     }
 
-    if (response.data.user) {
-      localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(response.data.user));
+    if ((response as any)?.data?.user) {
+      localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify((response as any).data.user));
     }
 
-    return response.data;
+    return (response as any).data;
   }
 
   /**
@@ -417,8 +512,7 @@ class AuthService {
    */
   isAuthenticated(): boolean {
     const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
-    const refresh = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
-    return !!(token && refresh);
+    return !!token;
   }
 }
 

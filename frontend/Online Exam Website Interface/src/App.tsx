@@ -31,6 +31,10 @@ import { authService } from './services';
 import { STORAGE_KEYS } from './constants';
 import OtpVerification from './pages/auth/OtpVerification';
 import { Toaster } from './components/ui/sonner';
+import ProtectedRoute from './routes/ProtectedRoute';
+import Forbidden from './pages/Forbidden';
+import TeacherApp from './teacher/TeacherApp';
+import AdminApp from './admin/AdminApp';
 // New history pages
 import PaymentHistory from './pages/User/PaymentHistory';
 import PurchasedExams from './pages/User/PurchasedExams';
@@ -107,6 +111,25 @@ function AppContent() {
           <Route path="/payment-history" element={<PaymentHistory />} />
           <Route path="/purchased-exams" element={<PurchasedExams />} />
           <Route path="/exam-history" element={<ExamHistory />} />
+          <Route path="/403" element={<Forbidden />} />
+          <Route
+            path="/admin/*"
+            element={
+              <ProtectedRoute
+                allowedRoles={["admin"]}
+                element={<AdminApp />}
+              />
+            }
+          />
+          <Route
+            path="/teacher/*"
+            element={
+              <ProtectedRoute
+                allowedRoles={["teacher","admin"]}
+                element={<TeacherApp />}
+              />
+            }
+          />
         </Routes>
       </main>
       <Footer />

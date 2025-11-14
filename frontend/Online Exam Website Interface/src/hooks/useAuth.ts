@@ -7,6 +7,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { authService } from '@/services/auth.service';
 import { userService } from '@/services/user.service';
 import { useMutation } from './useApi';
+import { STORAGE_KEYS } from '@/constants';
 import type {
   IUser,
   ILoginRequest,
@@ -94,18 +95,21 @@ export function useAuth(): IUseAuthReturn {
    */
   useEffect(() => {
     const loadUser = () => {
-      try {
-        const currentUser = authService.getCurrentUser();
-        const isAuth = authService.isAuthenticated();
+      const currentUser = authService.getCurrentUser();
+      const isAuth = authService.isAuthenticated();
 
-        if (isAuth && currentUser) {
-          setUser(currentUser);
-        }
-      } catch (error) {
-        console.error('Error loading user:', error);
-      } finally {
-        setLoading(false);
+      if (isAuth && currentUser) {
+        setUser(currentUser);
+      } else if (!isAuth && currentUser) {
+        console.warn('Xóa dữ liệu user cũ do không có token hợp lệ');
+        localStorage.removeItem(STORAGE_KEYS.USER_INFO);
+        localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+        localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+        setUser(null);
+      } else {
+        setUser(null);
       }
+      setLoading(false);
     };
 
     loadUser();
@@ -121,18 +125,26 @@ export function useAuth(): IUseAuthReturn {
   } = useMutation<ILoginResponse, [string, string]>(
     (email: string, password: string) => authService.login(email, password),
     {
-      onSuccess: (data) => {
+      onSuccess: (data, variables) => {
         const requiresVerification = (data as any)?.requiresVerification || !((data as any)?.token?.accessToken);
         if (requiresVerification) {
           setNeedsVerification(true);
-          // Don't set user yet, wait for OTP verification
+          const emailArg = variables?.[0];
+          if (emailArg) setLoginEmail(emailArg);
         } else if (data.user) {
           setUser(data.user);
           setNeedsVerification(false);
         }
       },
-      onError: (error) => {
-        console.error('Login failed:', error);
+      onError: (error, variables) => {
+        const msg = error?.message || '';
+        if (msg.includes('OTP') || msg.toLowerCase().includes('xác minh')) {
+          setNeedsVerification(true);
+          const emailArg = variables?.[0];
+          if (emailArg) setLoginEmail(emailArg);
+          return;
+        }
+        // Quietly keep error state for non-OTP cases; avoid noisy console logs
       },
     }
   );
@@ -150,7 +162,8 @@ export function useAuth(): IUseAuthReturn {
     },
     {
       onSuccess: (data) => {
-        setUser(data.user);
+        const persistedUser = authService.getCurrentUser();
+        setUser(persistedUser || data.user);
         setNeedsVerification(false);
         setLoginEmail('');
       },

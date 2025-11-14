@@ -38,6 +38,40 @@ const mockStatistics: IUserStatisticsResponse = {
 // ==================== USER SERVICE ====================
 
 class UserService {
+  private normalizeUser(raw: any): IUser {
+    const roleMap: Record<string | number, string> = {
+      1: 'admin',
+      2: 'teacher',
+      3: 'student',
+      admin: 'admin',
+      teacher: 'teacher',
+      instructor: 'teacher',
+      student: 'student',
+    };
+
+    const id = raw?.id ?? raw?.Id ?? raw?.UserId ?? raw?.userId ?? raw?.userid;
+    const username = raw?.username ?? raw?.UserName ?? raw?.userName ?? raw?.Email?.split?.('@')[0];
+    const email = raw?.email ?? raw?.Email;
+    const fullName = raw?.fullName ?? raw?.FullName ?? raw?.Name ?? '';
+    const phone = raw?.phone ?? raw?.PhoneNumber ?? raw?.Phone ?? '';
+    const avatar = raw?.avatar ?? raw?.AvatarUrl ?? raw?.Avatar ?? '';
+    const roleRaw = raw?.role ?? raw?.Role ?? raw?.RoleId;
+    const role = roleMap[roleRaw as any] ?? 'student';
+    const isVerified = raw?.isVerified ?? raw?.IsEmailVerified ?? false;
+    const isActive = raw?.isActive ?? (raw?.Status ? String(raw?.Status).toLowerCase() === 'active' : true);
+
+    return {
+      id: typeof id === 'string' ? id : String(id ?? ''),
+      username: String(username ?? ''),
+      fullName: String(fullName ?? ''),
+      email: String(email ?? ''),
+      phone: String(phone ?? ''),
+      role: role as any,
+      avatar: String(avatar ?? ''),
+      isVerified: Boolean(isVerified),
+      isActive: Boolean(isActive),
+    } as IUser;
+  }
   /**
    * Lấy thông tin profile của user hiện tại
    * @returns Promise với thông tin user
@@ -45,10 +79,11 @@ class UserService {
   async getUserProfile(): Promise<IUser> {
     try {
       // Ưu tiên lấy từ API thật nếu backend sẵn sàng
-      const user = await apiService.get<IUser>(USER_ENDPOINTS.ME);
-      if (user) {
-        localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(user));
-        return user;
+      const raw = await apiService.get<any>(USER_ENDPOINTS.ME);
+      if (raw) {
+        const normalized = this.normalizeUser(raw);
+        localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(normalized));
+        return normalized;
       }
     } catch (e) {
       // Thử fallback: nếu /users/me không tồn tại, decode JWT để lấy userId và gọi /users/{id}
@@ -61,10 +96,11 @@ class UserService {
           const sub = payload.sub || payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || payload.nameid;
           const userId = typeof sub === 'string' ? parseInt(sub, 10) : sub;
           if (userId && !Number.isNaN(userId)) {
-            const userById = await apiService.get<IUser>(USER_ENDPOINTS.GET_BY_ID(userId));
-            if (userById) {
-              localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(userById));
-              return userById;
+            const rawById = await apiService.get<any>(USER_ENDPOINTS.GET_BY_ID(userId));
+            if (rawById) {
+              const normalized = this.normalizeUser(rawById);
+              localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(normalized));
+              return normalized;
             }
           }
         }
@@ -74,7 +110,8 @@ class UserService {
       const userStr = localStorage.getItem(STORAGE_KEYS.USER_INFO);
       if (userStr) {
         try {
-          return JSON.parse(userStr);
+          const parsed = JSON.parse(userStr);
+          return this.normalizeUser(parsed);
         } catch {
           return mockUser;
         }
