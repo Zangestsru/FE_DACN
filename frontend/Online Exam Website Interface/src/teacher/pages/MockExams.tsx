@@ -165,10 +165,10 @@ export default function MockExams() {
                   </TableCell>
                   <TableCell className="px-4 py-3 w-48">
                     <div className="flex items-center justify-end gap-1">
-                      <Button size="sm" variant="outline" startIcon={<PencilIcon className="h-3 w-3" />} onClick={() => openEdit(e)} className="!border-gray-300 !text-gray-700 hover:!bg-gray-50 hover:!border-gray-400 transition-all duration-200 whitespace-nowrap text-xs px-2 py-1">
+                      <Button size="sm" variant="outline" startIcon={<PencilIcon className="h-3 w-3" />} onClick={() => openEdit(e)} className="border-gray-300! text-gray-700! hover:bg-gray-50! hover:border-gray-400! transition-all duration-200 whitespace-nowrap text-xs px-2 py-1">
                         Sửa
                       </Button>
-                      <Button size="sm" variant="outline" startIcon={<TrashBinIcon className="h-3 w-3" />} onClick={() => openDelete(e)} className="!border-red-300 !text-red-600 hover:!bg-red-50 hover:!border-red-400 transition-all duration-200 whitespace-nowrap text-xs px-2 py-1">
+                      <Button size="sm" variant="outline" startIcon={<TrashBinIcon className="h-3 w-3" />} onClick={() => openDelete(e)} className="border-red-300! text-red-600! hover:bg-red-50! hover:border-red-400! transition-all duration-200 whitespace-nowrap text-xs px-2 py-1">
                         Xóa
                       </Button>
                     </div>
@@ -266,7 +266,7 @@ export default function MockExams() {
               <p>Bạn có chắc chắn muốn xóa bài thi thử "{selected.name}"?</p>
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setIsDeleteOpen(false)}>Hủy</Button>
-                <Button className="!bg-red-600 hover:!bg-red-700" onClick={confirmDelete}>Xóa</Button>
+                <Button className="bg-red-600! hover:bg-red-700!" onClick={confirmDelete}>Xóa</Button>
               </div>
             </div>
           )}

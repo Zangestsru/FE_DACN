@@ -1,36 +1,38 @@
-import { UserCircleIcon, BoxIcon, ListIcon, ArrowUpIcon } from "../../icons";
-
 interface MetricCardProps {
   title: string;
   value: string;
   change: string;
   changeType: "increase" | "decrease";
-  icon: React.ReactNode;
+  icon: string;
   color: string;
+  bgGradient: string;
 }
 
-function MetricCard({ title, value, change, changeType, icon, color }: MetricCardProps) {
+function MetricCard({ title, value, change, changeType, icon, color, bgGradient }: MetricCardProps) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{value}</p>
-          <div className="flex items-center mt-2">
+    <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-xl dark:border-gray-800 dark:bg-gray-900">
+      {/* Background Gradient */}
+      <div className={`absolute -right-4 -top-4 h-24 w-24 rounded-full opacity-10 ${bgGradient}`}></div>
+      
+      <div className="relative flex items-start justify-between">
+        <div className="flex-1">
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</p>
+          <h3 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{value}</h3>
+          <div className="mt-3 flex items-center gap-2">
             <span
-              className={`text-xs font-medium ${
+              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
                 changeType === "increase"
-                  ? "text-green-600 dark:text-green-400"
-                  : "text-red-600 dark:text-red-400"
+                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
               }`}
             >
-              {changeType === "increase" ? "↗" : "↘"} {change}
+              {changeType === "increase" ? "↑" : "↓"} {change}
             </span>
-            <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">so với tháng trước</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">so với tháng trước</span>
           </div>
         </div>
-        <div className={`p-3 rounded-xl ${color}`}>
-          {icon}
+        <div className={`flex h-14 w-14 items-center justify-center rounded-xl ${color} shadow-lg`}>
+          <span className="text-2xl">{icon}</span>
         </div>
       </div>
     </div>
@@ -40,41 +42,45 @@ function MetricCard({ title, value, change, changeType, icon, color }: MetricCar
 export default function EducationMetrics() {
   const metrics = [
     {
-      title: "Tổng số Giáo viên",
-      value: "248",
-      change: "+12%",
+      title: "Tổng Học Sinh",
+      value: "1,247",
+      change: "+12.5%",
       changeType: "increase" as const,
-      icon: <UserCircleIcon className="h-6 w-6 text-white" />,
-      color: "bg-blue-500",
+      icon: "👥",
+      color: "bg-gradient-to-br from-blue-500 to-blue-600",
+      bgGradient: "bg-gradient-to-br from-blue-500 to-blue-600",
     },
     {
-      title: "Tổng số Học sinh",
-      value: "3,247",
-      change: "+8%",
+      title: "Bài Thi Đã Tạo",
+      value: "89",
+      change: "+8.2%",
       changeType: "increase" as const,
-      icon: <BoxIcon className="h-6 w-6 text-white" />,
-      color: "bg-green-500",
+      icon: "📝",
+      color: "bg-gradient-to-br from-green-500 to-green-600",
+      bgGradient: "bg-gradient-to-br from-green-500 to-green-600",
     },
     {
-      title: "Khóa học Hoạt động",
-      value: "156",
-      change: "+5%",
+      title: "Khóa Học",
+      value: "24",
+      change: "+15.3%",
       changeType: "increase" as const,
-      icon: <ListIcon className="h-6 w-6 text-white" />,
-      color: "bg-purple-500",
+      icon: "📚",
+      color: "bg-gradient-to-br from-purple-500 to-purple-600",
+      bgGradient: "bg-gradient-to-br from-purple-500 to-purple-600",
     },
     {
-      title: "Tỷ lệ Hoàn thành",
-      value: "87.5%",
-      change: "-2%",
-      changeType: "decrease" as const,
-      icon: <ArrowUpIcon className="h-6 w-6 text-white" />,
-      color: "bg-orange-500",
+      title: "Điểm Trung Bình",
+      value: "8.5",
+      change: "+2.1%",
+      changeType: "increase" as const,
+      icon: "⭐",
+      color: "bg-gradient-to-br from-orange-500 to-orange-600",
+      bgGradient: "bg-gradient-to-br from-orange-500 to-orange-600",
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-6">
       {metrics.map((metric, index) => (
         <MetricCard key={index} {...metric} />
       ))}

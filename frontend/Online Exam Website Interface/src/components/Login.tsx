@@ -19,7 +19,7 @@ export const Login: React.FC<LoginProps> = ({
   onRegister 
 }) => {
   const [loginSuccess, setLoginSuccess] = useState(false);
-  const { needsVerification, verifyLoginOtp, loginEmail } = useAuth();
+  const { needsVerification, verifyLoginOtp, loginEmail, user } = useAuth();
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [pendingEmail, setPendingEmail] = useState<string>('');
   const [verifying, setVerifying] = useState<boolean>(false);
@@ -37,6 +37,15 @@ export const Login: React.FC<LoginProps> = ({
     setPendingEmail(payload.email);
     if (payload.requiresVerification) {
       setShowOtpModal(true);
+    } else {
+      const role = (authService.getCurrentUser()?.role || '').toLowerCase();
+      if (role === 'admin') {
+        navigate('/admin');
+      } else if (role === 'teacher') {
+        navigate('/teacher');
+      } else {
+        navigate('/');
+      }
     }
   };
 
@@ -51,7 +60,14 @@ export const Login: React.FC<LoginProps> = ({
         window.dispatchEvent(new CustomEvent('auth:logged-in'));
         setShowOtpModal(false);
         console.log(`User ${emailToVerify} logged in successfully.`);
-        navigate('/');
+        const role = (authService.getCurrentUser()?.role || user?.role || '').toLowerCase();
+        if (role === 'admin') {
+          navigate('/admin');
+        } else if (role === 'teacher') {
+          navigate('/teacher');
+        } else {
+          navigate('/');
+        }
       }
       setVerifying(false);
     } catch (error: any) {

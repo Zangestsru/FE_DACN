@@ -61,8 +61,11 @@ const ExamCard: React.FC<ExamCardProps> = ({ title, subject, time, questionCount
 
 const ExamCards: React.FC = () => {
   // Sử dụng hook để lấy danh sách exams
-  const { data: examsData, loading, error } = useExams({ limit: 8 });
+  const { data: examsData, loading, error } = useExams({ page: 1, limit: 8 });
   const exams = examsData?.data || [];
+
+  console.log('📊 ExamCards - examsData:', examsData);
+  console.log('📊 ExamCards - exams:', exams);
 
   // Map data từ API sang format cũ để tương thích với ExamCard component
   const mappedExams = exams.map(exam => ({
@@ -73,6 +76,8 @@ const ExamCards: React.FC = () => {
     difficulty: (exam.difficulty === 'Cơ bản' ? 'Dễ' : exam.difficulty === 'Trung bình' ? 'Trung bình' : 'Khó') as 'Dễ' | 'Trung bình' | 'Khó',
     image: exam.image || '/images/background.png'
   }));
+
+  console.log('📊 ExamCards - mappedExams:', mappedExams);
 
   return (
     <section className="py-4 bg-light">

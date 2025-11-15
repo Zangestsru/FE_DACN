@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { ThemeToggleButton } from "../common/ThemeToggleButton";
 import NotificationDropdown from "./NotificationDropdown";
 import UserDropdown from "./UserDropdown";
@@ -9,7 +9,7 @@ interface HeaderProps {
   onClick?: () => void; // Optional function that takes no arguments and returns void
   onToggle: () => void;
 }
-const Header: React.FC<HeaderProps> = ({ onClick, onToggle }) => {
+function Header({ onClick, onToggle }: HeaderProps) {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
 
   const toggleApplicationMenu = () => {
@@ -163,6 +163,6 @@ const Header: React.FC<HeaderProps> = ({ onClick, onToggle }) => {
       </div>
     </header>
   );
-};
+}
 
 export default Header;

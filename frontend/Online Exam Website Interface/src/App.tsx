@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
 import Footer from './components/Footer.simple';
 import { HomePage } from './components/HomePage';
@@ -33,8 +33,8 @@ import OtpVerification from './pages/auth/OtpVerification';
 import { Toaster } from './components/ui/sonner';
 import ProtectedRoute from './routes/ProtectedRoute';
 import Forbidden from './pages/Forbidden';
-import TeacherApp from './teacher/TeacherApp';
-import AdminApp from './admin/AdminApp';
+const AdminApp = lazy(() => import('./admin/AdminApp'));
+const TeacherApp = lazy(() => import('./teacher/TeacherApp'));
 // New history pages
 import PaymentHistory from './pages/User/PaymentHistory';
 import PurchasedExams from './pages/User/PurchasedExams';
@@ -60,6 +60,7 @@ function AppContent() {
   const [emailForOtp, setEmailForOtp] = useState('');
   const { updateUser } = useAuthContext();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleOTPVerification = (type: string, contact: string) => {
     setOTPData({ 
@@ -99,12 +100,12 @@ function AppContent() {
           <Route path="/study-detail" element={<StudyDetail course={selectedCourse} onBackToList={() => navigate('/study-materials')} onRegister={() => navigate('/study-payment')} onStartLearning={() => navigate('/study-lesson')} />} />
           <Route path="/study-lesson" element={<StudyLesson course={selectedCourse} onBackToCourse={() => navigate('/study-detail')} />} />
           <Route path="/study-payment" element={<Payment exam={selectedCourse} onPaymentSuccess={() => navigate('/study-lesson')} onCancel={() => navigate('/study-detail')} />} />
-          <Route path="/certification-exams" element={<CertificationExams onExamSelect={(exam) => { setSelectedExam(exam); navigate('/exam-detail'); }} />} />
-          <Route path="/exam-detail" element={<ExamDetail exam={selectedExam} onBackToList={() => navigate('/certification-exams')} onRegister={() => navigate('/payment')} />} />
-          <Route path="/payment" element={<Payment exam={selectedExam} onPaymentSuccess={() => navigate('/pre-exam')} onCancel={() => navigate('/exam-detail')} />} />
-          <Route path="/pre-exam" element={<ExamInfoForm exam={selectedExam} onStartExam={() => navigate('/exam-taking')} showBackButton={true} onCancel={() => navigate('/exam-detail')} mode="preexam" />} />
-          <Route path="/exam-taking" element={<div style={{ minHeight: '100vh', height: 'auto' }}><ExamTaking exam={selectedExam} onSubmitExam={(result) => { setExamResult(result); navigate('/exam-result'); }} /></div>} />
-          <Route path="/exam-result" element={<ExamResult exam={selectedExam} result={examResult} onBackToHome={() => navigate('/')} />} />
+          <Route path="/certification-exams" element={<CertificationExams onExamSelect={(exam) => { setSelectedExam(exam); navigate(`/exam-detail/${exam.id}`); }} />} />
+          <Route path="/exam-detail/:examId" element={<ExamDetail onBackToList={() => navigate('/certification-exams')} onRegister={(examId) => navigate(`/payment/${examId}`)} onStartExam={(examId) => navigate(`/exam-start/${examId}`)} />} />
+          <Route path="/payment/:examId" element={<Payment onPaymentSuccess={(examId) => navigate(`/exam-start/${examId}`)} onCancel={() => navigate(-1)} />} />
+          <Route path="/exam-start/:examId" element={<ExamStart onStartExam={(attemptId) => navigate(`/exam-taking/${attemptId}`)} onCancel={() => navigate(-1)} />} />
+          <Route path="/exam-taking/:attemptId" element={<div style={{ minHeight: '100vh', height: 'auto' }}><ExamTaking onSubmitExam={(result) => { setExamResult(result); navigate(`/exam-result/${result.examAttemptId}`); }} /></div>} />
+          <Route path="/exam-result/:attemptId" element={<ExamResult onBackToHome={() => navigate('/')} />} />
           <Route path="/exam-start" element={<ExamStart />} />
           <Route path="/profile" element={<ProfilePage />} />
           {/* History routes */}
@@ -115,19 +116,23 @@ function AppContent() {
           <Route
             path="/admin/*"
             element={
-              <ProtectedRoute
-                allowedRoles={["admin"]}
-                element={<AdminApp />}
-              />
+              <Suspense fallback={null}>
+                <ProtectedRoute
+                  allowedRoles={["admin"]}
+                  element={<AdminApp />}
+                />
+              </Suspense>
             }
           />
           <Route
             path="/teacher/*"
             element={
-              <ProtectedRoute
-                allowedRoles={["teacher","admin"]}
-                element={<TeacherApp />}
-              />
+              <Suspense fallback={null}>
+                <ProtectedRoute
+                  allowedRoles={["teacher"]}
+                  element={<TeacherApp />}
+                />
+              </Suspense>
             }
           />
         </Routes>

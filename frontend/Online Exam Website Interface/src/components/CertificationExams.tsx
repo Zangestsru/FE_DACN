@@ -22,6 +22,15 @@ export const CertificationExams: React.FC<CertificationExamsProps> = ({ onExamSe
   });
 
   const exams = examsData?.data || [];
+  
+  // Debug logs
+  console.log('📊 CertificationExams component:', {
+    examsData,
+    loading,
+    error,
+    examsCount: exams.length,
+    total: examsData?.total
+  });
 
   const categories = [
     { value: 'all', label: 'Tất cả danh mục' },

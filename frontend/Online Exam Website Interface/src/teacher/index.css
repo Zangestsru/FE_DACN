@@ -1,63 +1,65 @@
-@import "tailwindcss/preflight";
-@import "tailwindcss/utilities";
+
+@reference "tailwindcss";
+@reference "../styles/globals.css";
 @layer base {
   body {
-    @apply relative text-base font-normal z-1 bg-gray-50;
+    @apply relative text-base font-normal bg-gray-50;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    z-index: 1;
   }
 }
 
 @layer components {
   .menu-item {
-    @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
+    @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-sm;
   }
   .menu-item-active {
-    @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+    @apply bg-brand-50 text-brand-500;
   }
   .menu-item-inactive {
-    @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
+    @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700;
   }
   .menu-item-icon {
-    @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400;
+    @apply text-gray-500 group-hover:text-gray-700;
   }
   .menu-item-icon-active {
-    @apply text-brand-500 dark:text-brand-400;
+    @apply text-brand-500;
   }
   .menu-item-icon-size svg {
-    @apply size-6 !important;
+    @apply w-6! h-6!;
   }
   .menu-item-icon-inactive {
-    @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+    @apply text-gray-500 group-hover:text-gray-700;
   }
 
   .menu-item-arrow {
     @apply relative;
   }
   .menu-item-arrow-active {
-    @apply rotate-180 text-brand-500 dark:text-brand-400;
+    @apply rotate-180 text-brand-500;
   }
   .menu-item-arrow-inactive {
-    @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+    @apply text-gray-500 group-hover:text-gray-700;
   }
 
   .menu-dropdown-item {
-    @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-theme-sm font-medium;
+    @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium;
   }
   .menu-dropdown-item-active {
-    @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+    @apply bg-brand-50 text-brand-500;
   }
   .menu-dropdown-item-inactive {
-    @apply text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5;
+    @apply text-gray-700 hover:bg-gray-100;
   }
 
   .menu-dropdown-badge {
-    @apply block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase text-brand-500 dark:text-brand-400;
+    @apply block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase text-brand-500;
   }
   .menu-dropdown-badge-active {
-    @apply bg-brand-100 dark:bg-brand-500/20;
+    @apply bg-brand-100;
   }
   .menu-dropdown-badge-inactive {
-    @apply bg-brand-50 group-hover:bg-brand-100 dark:bg-brand-500/15 dark:group-hover:bg-brand-500/20;
+    @apply bg-brand-50 group-hover:bg-brand-100;
   }
 }
 @layer utilities {
@@ -72,15 +74,20 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar {
-    @apply size-1.5;
+    width: 0.375rem; /* w-1.5 */
+    height: 0.375rem; /* h-1.5 */
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    @apply rounded-full;
+    border-radius: 9999px; /* rounded-full */
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-gray-200 rounded-full dark:bg-gray-700;
+    background-color: #e5e7eb; /* bg-gray-200 */
+    border-radius: 9999px; /* rounded-full */
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #374151; /* dark:bg-gray-700 */
   }
   /* For Remove Date Icon */
   input[type="date"]::-webkit-inner-spin-button,
@@ -101,72 +108,72 @@
 
 /* third-party libraries CSS */
 .apexcharts-legend-text {
-  @apply !text-gray-700 dark:!text-gray-400;
+  @apply text-gray-700!;
 }
 
 .apexcharts-text {
-  @apply !fill-gray-700 dark:!fill-gray-400;
+  @apply fill-gray-700!;
 }
 
 .apexcharts-tooltip.apexcharts-theme-light {
-  @apply gap-1 !rounded-lg !border-gray-200 p-3 !shadow-theme-sm dark:!border-gray-800 dark:!bg-gray-900;
+  @apply gap-1 rounded-lg! border-gray-200! p-3 shadow-theme-sm!;
 }
 
 .apexcharts-tooltip-marker {
-  @apply !mr-1.5 !h-1.5 !w-1.5;
+  @apply mr-1.5! h-1.5! w-1.5!;
 }
 .apexcharts-legend-text {
-  @apply !pl-5 !text-gray-700 dark:!text-gray-400;
+  @apply pl-5! text-gray-700!;
 }
 .apexcharts-tooltip-series-group {
-  @apply !p-0;
+  @apply p-0!;
 }
 .apexcharts-tooltip-y-group {
-  @apply !p-0;
+  @apply p-0!;
 }
 .apexcharts-tooltip-title {
-  @apply !mb-0 !border-b-0 !bg-transparent !p-0 !text-[10px] !leading-4 !text-gray-800 dark:!text-white/90;
+  @apply mb-0! border-b-0! bg-transparent! p-0! text-[10px]! leading-4! text-gray-800!;
 }
 .apexcharts-tooltip-text {
-  @apply !text-theme-xs !text-gray-700 dark:!text-white/90;
+  @apply text-xs! text-gray-700!;
 }
 .apexcharts-tooltip-text-y-value {
-  @apply !font-medium;
+  @apply font-medium!;
 }
 
 .apexcharts-gridline {
-  @apply !stroke-gray-100 dark:!stroke-gray-800;
+  @apply stroke-gray-100!;
 }
 #chartTwo .apexcharts-datalabels-group {
-  @apply !-translate-y-24;
+  @apply -translate-y-24!;
 }
 #chartTwo .apexcharts-datalabels-group .apexcharts-text {
-  @apply !fill-gray-800 !font-semibold dark:!fill-white/90;
+  @apply fill-gray-800! font-semibold!;
 }
 
 #chartDarkStyle .apexcharts-datalabels-group .apexcharts-text {
-  @apply !fill-gray-800 !font-semibold dark:!fill-white/90;
+  @apply fill-gray-800! font-semibold!;
 }
 
 #chartSixteen .apexcharts-legend {
-  @apply !p-0 !pl-6;
+  @apply p-0! pl-6!;
 }
 
 .jvectormap-container {
-  @apply !bg-gray-50 dark:!bg-gray-900;
+  @apply bg-gray-50!;
 }
 .jvectormap-region.jvectormap-element {
-  @apply !fill-gray-300 hover:!fill-brand-500 dark:!fill-gray-700 dark:hover:!fill-brand-500;
+  @apply fill-gray-300! hover:fill-brand-500!;
 }
 .jvectormap-marker.jvectormap-element {
-  @apply !stroke-gray-200 dark:!stroke-gray-800;
+  @apply stroke-gray-200!;
 }
 .jvectormap-tip {
-  @apply !bg-brand-500 !border-none !px-2 !py-1;
+  @apply bg-brand-500! border-none! px-2! py-1!;
 }
 .jvectormap-zoomin,
 .jvectormap-zoomout {
-  @apply !hidden;
+  @apply hidden!;
 }
 
 .stocks-slider-outer .swiper-button-next:after,
@@ -176,24 +183,29 @@
 
 .stocks-slider-outer .swiper-button-next,
 .stocks-slider-outer .swiper-button-prev {
-  @apply !static mt-0 h-8 w-9 rounded-full border dark:hover:bg-white/[0.05] border-gray-200 !text-gray-700 transition hover:bg-gray-100 dark:border-white/[0.03] dark:bg-gray-800 dark:!text-gray-400  dark:hover:!text-white/90;
+  @apply static! mt-0 h-8 w-9 rounded-full border;
 }
 
 .stocks-slider-outer .swiper-button-next.swiper-button-disabled,
 .stocks-slider-outer .swiper-button-prev.swiper-button-disabled {
-  @apply bg-white opacity-50 dark:bg-gray-900;
+  @apply bg-white opacity-50;
 }
 
 .stocks-slider-outer .swiper-button-next svg,
 .stocks-slider-outer .swiper-button-prev svg {
-  @apply !h-auto !w-auto;
+  @apply h-auto! w-auto!;
 }
 
 .flatpickr-wrapper {
   @apply w-full;
 }
 .flatpickr-calendar {
-  @apply mt-2 !bg-white !rounded-xl !p-5 !border !border-gray-200 !text-gray-500 dark:!bg-gray-dark dark:!text-gray-400 dark:!shadow-theme-xl 2xsm:!w-auto;
+  @apply mt-2 bg-white! rounded-xl! p-5! border! border-gray-200! text-gray-500!;
+}
+
+@custom-media --tw-2xsm (min-width: 24rem);
+@media (--tw-2xsm) {
+  .flatpickr-calendar { @apply w-auto!; }
 }
 
 .flatpickr-months .flatpickr-prev-month:hover svg,
@@ -210,7 +222,7 @@
 }
 .flatpickr-current-month .cur-month,
 .flatpickr-current-month input.cur-year {
-  @apply !h-auto !pt-0 !text-lg !font-medium !text-gray-800 dark:!text-white/90;
+  @apply !h-auto !pt-0 !text-lg !font-medium !text-gray-800;
 }
 
 .flatpickr-prev-month,
@@ -223,11 +235,11 @@
 }
 
 .flatpickr-weekday {
-  @apply !text-theme-sm !font-medium !text-gray-500 dark:!text-gray-400 !bg-transparent;
+  @apply !text-sm !font-medium !text-gray-500;
 }
 
 .flatpickr-day {
-  @apply !flex !items-center !text-theme-sm !font-medium !text-gray-800 dark:!text-white/90 dark:hover:!border-gray-300 dark:hover:!bg-gray-900;
+  @apply !flex !items-center !text-sm !font-medium !text-gray-800;
 }
 .flatpickr-day.nextMonthDay,
 .flatpickr-day.prevMonthDay {
@@ -251,7 +263,7 @@
 }
 .flatpickr-months .flatpickr-prev-month,
 .flatpickr-months .flatpickr-next-month {
-  @apply !top-7 dark:!fill-white dark:!text-white !bg-transparent;
+  @apply !top-7;
 }
 .flatpickr-months .flatpickr-prev-month.flatpickr-prev-month,
 .flatpickr-months .flatpickr-next-month.flatpickr-prev-month {
@@ -266,8 +278,7 @@
 }
 span.flatpickr-weekday,
 .flatpickr-months .flatpickr-month {
-  @apply dark:!fill-white dark:!text-white !bg-none;
-}
+  }
 .flatpickr-innerContainer {
   @apply !border-b-0;
 }
@@ -276,8 +287,7 @@ span.flatpickr-weekday,
 }
 .flatpickr-day.inRange {
   box-shadow: -5px 0 0 #f9fafb, 5px 0 0 #f9fafb !important;
-  @apply dark:!shadow-datepicker;
-}
+  }
 .flatpickr-day.inRange,
 .flatpickr-day.prevMonthDay.inRange,
 .flatpickr-day.nextMonthDay.inRange,
@@ -290,13 +300,13 @@ span.flatpickr-weekday,
 .flatpickr-day:focus,
 .flatpickr-day.prevMonthDay:focus,
 .flatpickr-day.nextMonthDay:focus {
-  @apply !border-gray-50 !bg-gray-50 dark:!border-0 dark:!border-white/5 dark:!bg-white/5;
+  @apply !border-gray-50 !bg-gray-50;
 }
 .flatpickr-day.selected,
 .flatpickr-day.startRange,
 .flatpickr-day.selected,
 .flatpickr-day.endRange {
-  @apply !text-white dark:!text-white;
+  @apply !text-white;
 }
 .flatpickr-day.selected,
 .flatpickr-day.startRange,
@@ -317,7 +327,7 @@ span.flatpickr-weekday,
 .flatpickr-day.startRange.nextMonthDay,
 .flatpickr-day.endRange.nextMonthDay {
   background: #465fff;
-  @apply !border-brand-500 !bg-brand-500 hover:!border-brand-500 hover:!bg-brand-500;
+  @apply !border-brand-500 !bg-brand-500  ;
 }
 .flatpickr-day.selected.startRange + .endRange:not(:nth-child(7n + 1)),
 .flatpickr-day.startRange.startRange + .endRange:not(:nth-child(7n + 1)),
@@ -329,8 +339,7 @@ span.flatpickr-weekday,
 .flatpickr-months .flatpickr-next-month svg,
 .flatpickr-months .flatpickr-prev-month,
 .flatpickr-months .flatpickr-next-month {
-  @apply hover:!fill-none;
-}
+  }
 .flatpickr-months .flatpickr-prev-month:hover svg,
 .flatpickr-months .flatpickr-next-month:hover svg {
   fill: none !important;
@@ -341,7 +350,7 @@ span.flatpickr-weekday,
 }
 
 .fc .fc-view-harness {
-  @apply max-w-full overflow-x-auto custom-scrollbar;
+  @apply max-w-full overflow-x-auto;
 }
 .fc-dayGridMonth-view.fc-view.fc-daygrid {
   @apply min-w-[718px];
@@ -360,7 +369,7 @@ span.flatpickr-weekday,
   @apply gap-2;
 }
 .fc-button-group .fc-button {
-  @apply flex h-10 w-10 items-center justify-center !rounded-lg border border-gray-200 bg-transparent hover:border-gray-200 hover:bg-gray-50 focus:shadow-none active:!border-gray-200 active:!bg-transparent active:!shadow-none dark:border-gray-800 dark:hover:border-gray-800 dark:hover:bg-gray-900 dark:active:!border-gray-800;
+  @apply flex h-10 w-10 items-center justify-center !rounded-lg border border-gray-200 bg-transparent hover:border-gray-200 hover:bg-gray-50;
 }
 
 .fc-button-group .fc-button.fc-prev-button:before {
@@ -381,31 +390,29 @@ span.flatpickr-weekday,
   @apply hidden;
 }
 .fc-addEventButton-button {
-  @apply !rounded-lg !border-0 !bg-brand-500 !px-4 !py-2.5 !text-sm !font-medium hover:!bg-brand-600 focus:!shadow-none;
+  @apply !rounded-lg !border-0 !bg-brand-500 !px-4 !py-2.5 !text-sm !font-medium;
 }
 .fc-toolbar-title {
-  @apply !text-lg !font-medium text-gray-800 dark:text-white/90;
+  @apply !text-lg !font-medium text-gray-800;
 }
 .fc-header-toolbar.fc-toolbar .fc-toolbar-chunk:last-child {
-  @apply rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900;
+  @apply rounded-lg bg-gray-100 p-0.5;
 }
 .fc-header-toolbar.fc-toolbar .fc-toolbar-chunk:last-child .fc-button {
-  @apply !h-auto !w-auto rounded-md !border-0 bg-transparent !px-5 !py-2 text-sm font-medium text-gray-500 hover:text-gray-700 focus:!shadow-none dark:text-gray-400;
+  @apply !h-auto !w-auto rounded-md !border-0 bg-transparent !px-5 !py-2 text-sm font-medium text-gray-500 hover:text-gray-700;
 }
-.fc-header-toolbar.fc-toolbar
-  .fc-toolbar-chunk:last-child
-  .fc-button.fc-button-active {
-  @apply text-gray-900 bg-white dark:bg-gray-800 dark:text-white;
+.fc-header-toolbar.fc-toolbar .fc-toolbar-chunk:last-child .fc-button.fc-button-active {
+  @apply text-gray-900 bg-white;
 }
 .fc-theme-standard th {
-  @apply !border-x-0 border-t !border-gray-200 bg-gray-50 !text-left dark:!border-gray-800 dark:bg-gray-900;
+  @apply border-x-0! border-t border-gray-200! bg-gray-50 text-left!;
 }
 .fc-theme-standard td,
 .fc-theme-standard .fc-scrollgrid {
-  @apply !border-gray-200 dark:!border-gray-800;
+  @apply border-gray-200!;
 }
 .fc .fc-col-header-cell-cushion {
-  @apply !px-5 !py-4 text-sm font-medium uppercase text-gray-400;
+  @apply px-5! py-4! text-sm font-medium uppercase text-gray-400;
 }
 .fc .fc-daygrid-day.fc-day-today {
   @apply bg-transparent;
@@ -414,19 +421,17 @@ span.flatpickr-weekday,
   @apply p-2;
 }
 .fc .fc-daygrid-day.fc-day-today .fc-scrollgrid-sync-inner {
-  @apply rounded bg-gray-100 dark:bg-white/[0.03];
+  @apply rounded bg-gray-100;
 }
 .fc .fc-daygrid-day-number {
-  @apply !p-3 text-sm font-medium text-gray-700 dark:text-gray-400;
+  @apply p-3! text-sm font-medium text-gray-700;
 }
-.fc .fc-daygrid-day-top {
-  @apply !flex-row;
-}
+.fc .fc-daygrid-day-top { @apply flex-row!; }
 .fc .fc-day-other .fc-daygrid-day-top {
   opacity: 1;
 }
 .fc .fc-day-other .fc-daygrid-day-top .fc-daygrid-day-number {
-  @apply text-gray-400 dark:text-white/30;
+  @apply text-gray-400;
 }
 .event-fc-color {
   @apply rounded-lg py-2.5 pl-4 pr-3;
@@ -437,41 +442,39 @@ span.flatpickr-weekday,
 .fc-daygrid-event-dot {
   @apply w-1 h-5 ml-0 mr-3 border-none rounded;
 }
-.fc-event {
-  @apply focus:shadow-none;
-}
+.fc-event {}
 .fc-daygrid-event.fc-event-start {
-  @apply !ml-3;
+  @apply ml-3!;
 }
 .event-fc-color.fc-bg-success {
-  @apply border-success-50 bg-success-50;
+  border-color: #ECFDF3; background-color: #ECFDF3;
 }
 .event-fc-color.fc-bg-danger {
-  @apply border-error-50 bg-error-50;
+  border-color: #FEF3F2; background-color: #FEF3F2;
 }
 .event-fc-color.fc-bg-primary {
-  @apply border-brand-50 bg-brand-50;
+  border-color: #ECF3FF; background-color: #ECF3FF;
 }
 .event-fc-color.fc-bg-warning {
-  @apply border-orange-50 bg-orange-50;
+  border-color: #FFF6ED; background-color: #FFF6ED;
 }
 .event-fc-color.fc-bg-success .fc-daygrid-event-dot {
-  @apply bg-success-500;
+  background-color: #12B76A;
 }
 .event-fc-color.fc-bg-danger .fc-daygrid-event-dot {
-  @apply bg-error-500;
+  background-color: #F04438;
 }
 .event-fc-color.fc-bg-primary .fc-daygrid-event-dot {
-  @apply bg-brand-500;
+  background-color: #465FFF;
 }
 .event-fc-color.fc-bg-warning .fc-daygrid-event-dot {
-  @apply bg-orange-500;
+  background-color: #FB6514;
 }
 .fc-direction-ltr .fc-timegrid-slot-label-frame {
-  @apply px-3 py-1.5 text-left text-sm font-medium text-gray-500 dark:text-gray-400;
+  @apply px-3 py-1.5 text-left text-sm font-medium text-gray-500;
 }
 .fc .fc-timegrid-axis-cushion {
-  @apply text-sm font-medium text-gray-500 dark:text-gray-400;
+  @apply text-sm font-medium text-gray-500;
 }
 
 .input-date-icon::-webkit-inner-spin-button,
@@ -482,7 +485,7 @@ span.flatpickr-weekday,
 
 .swiper-button-prev svg,
 .swiper-button-next svg {
-  @apply !h-auto !w-auto;
+  @apply h-auto! w-auto!;
 }
 
 .carouselTwo .swiper-button-next:after,
@@ -506,22 +509,22 @@ span.flatpickr-weekday,
 
 .carouselTwo .swiper-button-prev,
 .carouselFour .swiper-button-prev {
-  @apply !left-3 sm:!left-4;
+  @apply left-3! sm:left-4!;
 }
 
 .carouselTwo .swiper-button-next,
 .carouselFour .swiper-button-next {
-  @apply !right-3 sm:!right-4;
+  @apply right-3! sm:right-4!;
 }
 
 .carouselThree .swiper-pagination,
 .carouselFour .swiper-pagination {
-  @apply !bottom-3 !left-1/2 inline-flex !w-auto -translate-x-1/2 items-center gap-1.5 rounded-[40px] border-[0.5px] border-white/10 bg-white/60 px-2 py-1.5 shadow-slider-navigation backdrop-blur-[10px] sm:!bottom-5;
+  @apply bottom-3! left-1/2! inline-flex w-auto! -translate-x-1/2 items-center gap-1.5 rounded-[40px] border-[0.5px] border-white/10 bg-white/60 px-2 py-1.5 shadow-slider-navigation backdrop-blur-[10px] sm:bottom-5!;
 }
 
 .carouselThree .swiper-pagination-bullet,
 .carouselFour .swiper-pagination-bullet {
-  @apply !m-0 h-2.5 w-2.5 bg-white opacity-100 shadow-theme-xs duration-200 ease-in-out;
+  @apply m-0! h-2.5 w-2.5 bg-white opacity-100 shadow-theme-xs duration-200 ease-in-out;
 }
 
 .carouselThree .swiper-pagination-bullet-active,
@@ -530,7 +533,7 @@ span.flatpickr-weekday,
 }
 
 .form-check-input:checked ~ span {
-  @apply border-[6px] border-brand-500 bg-brand-500 dark:border-brand-500;
+  @apply border-[6px] border-brand-500 bg-brand-500;
 }
 
 .taskCheckbox:checked ~ .box span {
@@ -540,7 +543,7 @@ span.flatpickr-weekday,
   @apply text-gray-400 line-through;
 }
 .taskCheckbox:checked ~ .box {
-  @apply border-brand-500 bg-brand-500 dark:border-brand-500;
+  @apply border-brand-500 bg-brand-500;
 }
 
 .task {
@@ -565,9 +568,11 @@ span.flatpickr-weekday,
 }
 
 .simplebar-scrollbar:before {
-  @apply bg-gray-200 rounded-full dark:bg-gray-700 opacity-100 !important;
+  @apply bg-gray-200 rounded-full;
 }
 
 .simplebar-scrollbar.simplebar-visible:before {
   @apply opacity-100;
 }
+
+

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import PageMeta from "../components/common/PageMeta";
 import { Table, TableHeader, TableBody, TableRow, TableCell } from "../components/ui/table";
+import FlyonDataTableWrapper from "../components/ui/table/FlyonDataTableWrapper";
 import Button from "../components/ui/button/Button";
 import { UserCircleIcon, EyeIcon } from "../../admin/icons";
 import { Modal } from "../components/ui/modal";
@@ -53,31 +54,39 @@ export default function Students() {
         <h1 className="text-2xl font-semibold mb-4">Quản Lý Học Viên</h1>
 
         {/* Thanh lọc */}
-        <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <input
-            value={nameQuery}
-            onChange={(e) => setNameQuery(e.target.value)}
-            placeholder="Lọc theo tên"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
-          />
-          <input
-            value={emailQuery}
-            onChange={(e) => setEmailQuery(e.target.value)}
-            placeholder="Lọc theo email"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
-          />
-          <input
-            value={classQuery}
-            onChange={(e) => setClassQuery(e.target.value)}
-            placeholder="Lọc theo lớp"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
-          />
+        <div className="card p-4 mb-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <input
+              value={nameQuery}
+              onChange={(e) => setNameQuery(e.target.value)}
+              placeholder="Lọc theo tên"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
+            />
+            <input
+              value={emailQuery}
+              onChange={(e) => setEmailQuery(e.target.value)}
+              placeholder="Lọc theo email"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
+            />
+            <input
+              value={classQuery}
+              onChange={(e) => setClassQuery(e.target.value)}
+              placeholder="Lọc theo lớp"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
+            />
+          </div>
         </div>
 
-        <div className="overflow-x-auto rounded-xl ring-1 ring-gray-200 dark:ring-gray-800">
+        <FlyonDataTableWrapper pageLength={10} selecting selectAllSelector="#st-checkbox-all">
           <Table className="min-w-full table-fixed">
             <TableHeader>
               <TableRow className="bg-gray-50 dark:bg-gray-800/50">
+                <TableCell isHeader className="w-4 pr-0">
+                  <div className="flex h-5">
+                    <input id="st-checkbox-all" type="checkbox" className="checkbox checkbox-sm" />
+                    <label htmlFor="st-checkbox-all" className="sr-only">Checkbox</label>
+                  </div>
+                </TableCell>
                 <TableCell isHeader className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Học viên</TableCell>
                 <TableCell isHeader className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Email</TableCell>
                 <TableCell isHeader className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Số điện thoại</TableCell>
@@ -87,7 +96,13 @@ export default function Students() {
             </TableHeader>
             <TableBody>
               {filtered.map((s) => (
-                <TableRow key={s.id} className="border-t border-gray-100 dark:border-gray-800">
+                <TableRow key={s.id} className="border-t border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/40">
+                  <TableCell className="w-4 pr-0">
+                    <div className="flex h-5 items-center">
+                      <input id={`st-row-${s.id}`} type="checkbox" className="checkbox checkbox-sm" data-datatable-row-selecting-individual="" />
+                      <label htmlFor={`st-row-${s.id}`} className="sr-only">Checkbox</label>
+                    </div>
+                  </TableCell>
                   <TableCell className="px-4 py-3">
                     <div className="flex items-center gap-2">
                       {s.avatarUrl ? (
@@ -108,16 +123,16 @@ export default function Students() {
                   <TableCell className="px-4 py-3 text-gray-600 dark:text-gray-300 text-sm">{s.className || "-"}</TableCell>
                   <TableCell className="px-4 py-3 w-40">
                     <div className="flex items-center justify-end gap-1">
-                      <Button size="sm" variant="outline" startIcon={<EyeIcon className="h-3 w-3" />} onClick={() => openDetail(s)} className="!border-gray-300 !text-gray-700 hover:!bg-gray-50 hover:!border-gray-400 transition-all duration-200 whitespace-nowrap text-xs px-2 py-1">
-                        Chi tiết
-                      </Button>
+                      <button className="btn btn-circle btn-text" aria-label="Chi tiết" onClick={() => openDetail(s)}>
+                        <EyeIcon className="size-5" />
+                      </button>
                     </div>
                   </TableCell>
-                </TableRow>
+              </TableRow>
               ))}
             </TableBody>
           </Table>
-        </div>
+        </FlyonDataTableWrapper>
 
         {/* Modal chi tiết */}
         <Modal isOpen={isDetailOpen} onClose={() => setIsDetailOpen(false)} className="max-w-md p-6">

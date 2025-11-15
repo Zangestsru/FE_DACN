@@ -138,8 +138,14 @@ export function useApi<T, P extends any[] = any[]>(
       try {
         const result = await serviceFunction(...args);
 
-        if (!isMountedRef.current) return;
+        console.log('🎯 useApi execute - result received:', result);
 
+        if (!isMountedRef.current) {
+          console.log('⚠️ useApi - component unmounted, skipping state update');
+          return;
+        }
+
+        console.log('📝 useApi - updating state with data');
         setData(result);
         setLoading(false);
         retryCountRef.current = 0;
@@ -220,6 +226,8 @@ export function useApi<T, P extends any[] = any[]>(
 
   // Auto fetch on mount
   useEffect(() => {
+    isMountedRef.current = true;
+    
     if (immediate) {
       execute([] as unknown as P);
     }

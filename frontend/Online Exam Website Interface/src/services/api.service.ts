@@ -20,15 +20,13 @@ export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || window.location
 /**
  * API Version
  */
-export const API_VERSION = (import.meta.env.VITE_API_VERSION ?? '').trim();
+export const API_VERSION = ''; // No version prefix for backend API
 
 /**
  * Full API URL
  */
 // Build base API path robustly even when API_VERSION is empty
-const API_PATH = API_VERSION
-  ? `/api/${API_VERSION.replace(/^\/+|\/+$/g, '')}`
-  : '/api';
+const API_PATH = '/api';
 
 export const API_URL = `${API_BASE_URL}${API_PATH}`;
 

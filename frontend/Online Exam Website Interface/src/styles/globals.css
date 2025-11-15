@@ -1,4 +1,5 @@
 @custom-variant dark (&:is(.dark *));
+ 
 
 :root {
   --font-size: 16px;
@@ -117,7 +118,38 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  /* Brand palette for teacher/admin styles */
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-400: #7c8dff;
+  --color-brand-500: #465fff;
+  /* Optional deep brand for dark accents */
+  --color-brand-950: #0b1024;
+  /* Custom text size tokens used in CSS */
+  --text-theme-xs: 0.75rem;
+  --text-theme-sm: 0.875rem;
+  /* Custom shadows used in utilities */
+  --shadow-theme-xs: 0 1px 2px rgba(16, 24, 40, 0.03);
+  --shadow-theme-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-theme-md: 0 2px 8px rgba(16, 24, 40, 0.08);
+  --shadow-theme-lg: 0 4px 16px rgba(16, 24, 40, 0.12);
+  --shadow-theme-xl: 0 8px 24px rgba(16, 24, 40, 0.16);
+  --shadow-datepicker: 0 12px 24px rgba(0, 0, 0, 0.3);
+  /* Custom breakpoint for teacher CSS */
+  --breakpoint-2xsm: 24rem;
 }
+
+@utility shadow-theme-xs { box-shadow: var(--shadow-theme-xs); }
+@utility shadow-theme-sm { box-shadow: var(--shadow-theme-sm); }
+@utility shadow-theme-md { box-shadow: var(--shadow-theme-md); }
+@utility shadow-theme-lg { box-shadow: var(--shadow-theme-lg); }
+@utility shadow-theme-xl { box-shadow: var(--shadow-theme-xl); }
+@utility shadow-datepicker { box-shadow: var(--shadow-datepicker); }
+@utility shadow-slider-navigation { box-shadow: 0 10px 25px rgba(16, 24, 40, 0.15); }
+
+@utility bg-background { background-color: var(--color-background); }
+@utility text-foreground { color: var(--color-foreground); }
+@utility border-border { border-color: var(--color-border); }
 
 @layer base {
   * {
@@ -187,3 +219,13 @@
 html {
   font-size: var(--font-size);
 }
+@utility shadow-theme-xs { box-shadow: var(--shadow-theme-xs); }
+@utility shadow-theme-sm { box-shadow: var(--shadow-theme-sm); }
+@utility shadow-theme-md { box-shadow: var(--shadow-theme-md); }
+@utility shadow-theme-lg { box-shadow: var(--shadow-theme-lg); }
+@utility shadow-theme-xl { box-shadow: var(--shadow-theme-xl); }
+
+@utility bg-background { background-color: var(--color-background); }
+@utility text-foreground { color: var(--color-foreground); }
+@utility border-border { border-color: var(--color-border); }
+@utility bg-gray-dark { background-color: var(--secondary); }

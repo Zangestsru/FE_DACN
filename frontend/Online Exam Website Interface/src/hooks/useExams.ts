@@ -3,7 +3,7 @@
  * Custom hooks cho exam management
  */
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { examService } from '@/services/exam.service';
 import { useApi, useMutation } from './useApi';
 import type {
@@ -30,8 +30,13 @@ import type {
  * ```
  */
 export function useExams(params?: IGetExamsRequest, immediate = true) {
-  return useApi<IGetExamsResponse, [IGetExamsRequest?]>(
-    (params) => examService.getAllExams(params),
+  console.log('🎣 useExams called with params:', params);
+  
+  const { data, loading, error, refetch } = useApi<IGetExamsResponse, any[]>(
+    () => {
+      console.log('🎣 Service function executing...');
+      return examService.getAllExams(params);
+    },
     {
       immediate,
       cacheKey: params ? `exams-${JSON.stringify(params)}` : 'exams',
@@ -39,8 +44,23 @@ export function useExams(params?: IGetExamsRequest, immediate = true) {
       onError: (error) => {
         console.error('Error fetching exams:', error);
       },
+      onSuccess: (result) => {
+        console.log('✅ useExams onSuccess:', result);
+      },
     }
   );
+
+  console.log('🎣 useExams state - data:', data, 'loading:', loading, 'error:', error);
+
+  // Re-fetch when params change
+  useEffect(() => {
+    if (params && immediate) {
+      console.log('🔄 Refetching due to params change');
+      refetch();
+    }
+  }, [JSON.stringify(params)]);
+
+  return { data, loading, error, refetch };
 }
 
 // ==================== USE EXAM DETAIL HOOK ====================
@@ -331,6 +351,28 @@ export function useRelatedExams(examId: string | number | null, immediate = true
       cacheKey: examId ? `related-exams-${examId}` : undefined,
       onError: (error) => {
         console.error('Error fetching related exams:', error);
+      },
+    }
+  );
+}
+
+// ==================== USE START EXAM HOOK ====================
+
+/**
+ * Hook để bắt đầu làm bài thi
+ * 
+ * @example
+ * ```typescript
+ * const { execute: startExam, loading, error } = useStartExam();
+ * const result = await startExam(examId);
+ * ```
+ */
+export function useStartExam() {
+  return useMutation(
+    (examId: number) => examService.startExam(examId),
+    {
+      onError: (error) => {
+        console.error('Error starting exam:', error);
       },
     }
   );

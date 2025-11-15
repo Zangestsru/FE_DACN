@@ -14,19 +14,19 @@
  * Authentication & Authorization Endpoints
  */
 export const AUTH_ENDPOINTS = {
-  LOGIN: '/auth/login',
-  REGISTER: '/auth/register',
-  LOGOUT: '/auth/logout',
-  REFRESH_TOKEN: '/auth/refresh',
-  FORGOT_PASSWORD: '/auth/forgot-password',
-  RESET_PASSWORD: '/auth/reset-password',
-  VERIFY_OTP: '/auth/verify-otp',
-  VERIFY_LOGIN_OTP: '/auth/verify-login-otp',
-  RESEND_OTP: '/auth/resend-otp',
-  CHANGE_PASSWORD: '/auth/change-password',
-  VERIFY_EMAIL: '/auth/verify-email',
-  GOOGLE_LOGIN: '/auth/google',
-  FACEBOOK_LOGIN: '/auth/facebook',
+  LOGIN: '/Auth/login',
+  REGISTER: '/Auth/register',
+  LOGOUT: '/Auth/logout',
+  REFRESH_TOKEN: '/Auth/refresh',
+  FORGOT_PASSWORD: '/Auth/forgot-password',
+  RESET_PASSWORD: '/Auth/reset-password',
+  VERIFY_OTP: '/Auth/verify-otp',
+  VERIFY_LOGIN_OTP: '/Auth/verify-login-otp',
+  RESEND_OTP: '/Auth/resend-otp',
+  CHANGE_PASSWORD: '/Auth/change-password',
+  VERIFY_EMAIL: '/Auth/verify-email',
+  GOOGLE_LOGIN: '/Auth/google',
+  FACEBOOK_LOGIN: '/Auth/facebook',
 } as const;
 
 // ==================== USER ENDPOINTS ====================
@@ -37,25 +37,25 @@ export const AUTH_ENDPOINTS = {
 export const USER_ENDPOINTS = {
   
   // Cập nhật profile (bao gồm ngày sinh)
-  UPDATE_PROFILE: '/users/profile',
+  UPDATE_PROFILE: '/Users/profile',
   
   // Cập nhật avatar
-  UPDATE_AVATAR: '/users/upload-avatar',
+  UPDATE_AVATAR: '/Users/upload-avatar',
   
   // Lấy thông tin user theo ID
-  GET_BY_ID: (id: string | number) => `/users/${id}`,
+  GET_BY_ID: (id: string | number) => `/Users/${id}`,
   
   // Lấy danh sách users
-  LIST: '/users',
+  LIST: '/Users',
   
   // Xóa user
-  DELETE: (id: string | number) => `/users/${id}`,
+  DELETE: (id: string | number) => `/Users/${id}`,
   
   // Lấy lịch sử hoạt động
-  ACTIVITY_HISTORY: '/users/activity',
+  ACTIVITY_HISTORY: '/Users/activity',
   
   // Lấy thống kê user
-  STATISTICS: '/users/statistics',
+  STATISTICS: '/Users/statistics',
 } as const;
 
 // ==================== EXAM ENDPOINTS ====================
@@ -65,10 +65,10 @@ export const USER_ENDPOINTS = {
  */
 export const EXAM_ENDPOINTS = {
   // Lấy danh sách bài thi
-  LIST: '/exams',
+  LIST: '/Exams',
   
   // Lấy chi tiết bài thi
-  GET_BY_ID: (id: string | number) => `/exams/${id}`,
+  GET_BY_ID: (id: string | number) => `/Exams/${id}`,
   
   // Tạo bài thi mới (Admin)
   CREATE: '/exams',

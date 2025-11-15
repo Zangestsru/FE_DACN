@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import PageMeta from "../components/common/PageMeta";
 import { Table, TableHeader, TableBody, TableRow, TableCell } from "../components/ui/table";
+import FlyonDataTableWrapper from "../components/ui/table/FlyonDataTableWrapper";
 import Button from "../components/ui/button/Button";
 import { PlusIcon, PencilIcon, TrashBinIcon, EyeIcon } from "../../admin/icons";
 import { Modal } from "../components/ui/modal";
@@ -257,71 +258,81 @@ export default function Questions() {
         </div>
 
         {/* Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="text-2xl font-bold text-blue-600">{questionList.length}</div>
-            <div className="text-sm text-gray-500">Tổng câu hỏi</div>
-          </div>
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="text-2xl font-bold text-green-600">
-              {questionList.filter(q => q.type === "multiple_choice").length}
+        <div className="card p-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="text-2xl font-bold text-blue-600">{questionList.length}</div>
+              <div className="text-sm text-gray-500">Tổng câu hỏi</div>
             </div>
-            <div className="text-sm text-gray-500">Trắc nghiệm</div>
-          </div>
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="text-2xl font-bold text-yellow-600">
-              {questionList.filter(q => q.type === "true_false").length}
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="text-2xl font-bold text-green-600">
+                {questionList.filter(q => q.type === "multiple_choice").length}
+              </div>
+              <div className="text-sm text-gray-500">Trắc nghiệm</div>
             </div>
-            <div className="text-sm text-gray-500">Đúng/Sai</div>
-          </div>
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="text-2xl font-bold text-purple-600">
-              {questionList.filter(q => q.type === "essay").length}
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="text-2xl font-bold text-yellow-600">
+                {questionList.filter(q => q.type === "true_false").length}
+              </div>
+              <div className="text-sm text-gray-500">Đúng/Sai</div>
             </div>
-            <div className="text-sm text-gray-500">Tự luận</div>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="text-2xl font-bold text-purple-600">
+                {questionList.filter(q => q.type === "essay").length}
+              </div>
+              <div className="text-sm text-gray-500">Tự luận</div>
+            </div>
           </div>
         </div>
 
         {/* Filter bar */}
-        <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <input
-            value={contentQuery}
-            onChange={(e) => setContentQuery(e.target.value)}
-            placeholder="Tìm kiếm nội dung câu hỏi"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
-          />
-          <input
-            value={subjectQuery}
-            onChange={(e) => setSubjectQuery(e.target.value)}
-            placeholder="Lọc theo môn học"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
-          />
-          <select
-            value={typeQuery}
-            onChange={(e) => setTypeQuery((e.target.value || "") as any)}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
-          >
-            <option value="">Tất cả loại câu hỏi</option>
-            <option value="multiple_choice">Trắc nghiệm</option>
-            <option value="true_false">Đúng/Sai</option>
-            <option value="essay">Tự luận</option>
-          </select>
-          <select
-            value={difficultyQuery}
-            onChange={(e) => setDifficultyQuery((e.target.value || "") as any)}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
-          >
-            <option value="">Tất cả độ khó</option>
-            <option value="easy">Dễ</option>
-            <option value="medium">Trung bình</option>
-            <option value="hard">Khó</option>
-          </select>
+        <div className="card p-4 mb-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <input
+              value={contentQuery}
+              onChange={(e) => setContentQuery(e.target.value)}
+              placeholder="Tìm kiếm nội dung câu hỏi"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
+            />
+            <input
+              value={subjectQuery}
+              onChange={(e) => setSubjectQuery(e.target.value)}
+              placeholder="Lọc theo môn học"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
+            />
+            <select
+              value={typeQuery}
+              onChange={(e) => setTypeQuery((e.target.value || "") as any)}
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
+            >
+              <option value="">Tất cả loại câu hỏi</option>
+              <option value="multiple_choice">Trắc nghiệm</option>
+              <option value="true_false">Đúng/Sai</option>
+              <option value="essay">Tự luận</option>
+            </select>
+            <select
+              value={difficultyQuery}
+              onChange={(e) => setDifficultyQuery((e.target.value || "") as any)}
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700"
+            >
+              <option value="">Tất cả độ khó</option>
+              <option value="easy">Dễ</option>
+              <option value="medium">Trung bình</option>
+              <option value="hard">Khó</option>
+            </select>
+          </div>
         </div>
 
-        <div className="overflow-x-auto rounded-xl ring-1 ring-gray-200 dark:ring-gray-800">
+        <FlyonDataTableWrapper pageLength={5} selecting selectAllSelector="#q-checkbox-all">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gray-50 dark:bg-gray-800/50">
+              <TableRow className="bg-white border-x-0 border-t border-gray-200 dark:border-gray-800">
+                <TableCell isHeader className="w-4 pr-0 --exclude-from-ordering">
+                  <div className="flex h-5">
+                    <input id="q-checkbox-all" type="checkbox" className="checkbox checkbox-sm" />
+                    <label htmlFor="q-checkbox-all" className="sr-only">Checkbox</label>
+                  </div>
+                </TableCell>
                 <TableCell isHeader className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nội dung</TableCell>
                 <TableCell isHeader className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Môn học</TableCell>
                 <TableCell isHeader className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Loại</TableCell>
@@ -333,7 +344,13 @@ export default function Questions() {
             </TableHeader>
             <TableBody>
               {filteredQuestions.map((question) => (
-                <TableRow key={question.id} className="border-t border-gray-100 dark:border-gray-800">
+                <TableRow key={question.id} className="border-t border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/40">
+                  <TableCell className="w-4 pr-0">
+                    <div className="flex h-5 items-center">
+                      <input id={`q-row-${question.id}`} type="checkbox" className="checkbox checkbox-sm" data-datatable-row-selecting-individual="" />
+                      <label htmlFor={`q-row-${question.id}`} className="sr-only">Checkbox</label>
+                    </div>
+                  </TableCell>
                   <TableCell className="px-6 py-4">
                     <div className="max-w-xs">
                       <div className="font-medium text-gray-900 dark:text-white truncate">
@@ -356,23 +373,23 @@ export default function Questions() {
                   <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">{question.points}</TableCell>
                   <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">{question.createdBy}</TableCell>
                   <TableCell className="px-6 py-4">
-                    <div className="flex items-center justify-end gap-2">
-                      <Button size="sm" variant="outline" startIcon={<EyeIcon className="h-4 w-4" />} onClick={() => openView(question)}>
-                        Xem
-                      </Button>
-                      <Button size="sm" variant="outline" startIcon={<PencilIcon className="h-4 w-4" />} onClick={() => openEdit(question)}>
-                        Sửa
-                      </Button>
-                      <Button size="sm" className="!bg-red-500 hover:!bg-red-600" startIcon={<TrashBinIcon className="h-4 w-4" />} onClick={() => openDelete(question)}>
-                        Xóa
-                      </Button>
+                    <div className="flex items-center justify-end gap-1">
+                      <button className="btn btn-circle btn-text" aria-label="Xem" onClick={() => openView(question)}>
+                        <EyeIcon className="size-5" />
+                      </button>
+                      <button className="btn btn-circle btn-text" aria-label="Sửa" onClick={() => openEdit(question)}>
+                        <PencilIcon className="size-5" />
+                      </button>
+                      <button className="btn btn-circle btn-text" aria-label="Xóa" onClick={() => openDelete(question)}>
+                        <TrashBinIcon className="size-5" />
+                      </button>
                     </div>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        </div>
+        </FlyonDataTableWrapper>
       </div>
 
       {/* Modal xem chi tiết */}
@@ -540,7 +557,7 @@ export default function Questions() {
                           options: (f.options || []).filter((_, i) => i !== idx),
                           correctAnswer: f.correctAnswer === idx ? undefined : f.correctAnswer,
                         }))}
-                        className="!border-red-300 !text-red-600"
+                        className="border-red-300! text-red-600!"
                       >
                         Xóa
                       </Button>
@@ -677,7 +694,7 @@ export default function Questions() {
                             options: (f.options || []).filter((_, i) => i !== idx),
                             correctAnswer: f.correctAnswer === idx ? undefined : f.correctAnswer,
                           } : f)}
-                          className="!border-red-300 !text-red-600"
+                          className="border-red-300! text-red-600!"
                         >
                           Xóa
                         </Button>
@@ -727,7 +744,7 @@ export default function Questions() {
             </p>
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={() => setIsDeleteOpen(false)}>Hủy</Button>
-              <Button className="!bg-red-500 hover:!bg-red-600" onClick={confirmDelete}>Xóa</Button>
+              <Button className="bg-red-500! hover:bg-red-600!" onClick={confirmDelete}>Xóa</Button>
             </div>
           </div>
         )}

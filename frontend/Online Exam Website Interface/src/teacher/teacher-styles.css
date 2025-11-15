@@ -1,0 +1,39 @@
+/* Teacher-specific utility classes - Plain CSS without @apply */
+
+/* Scrollbar utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0.375rem;
+  height: 0.375rem;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e4e7ec;
+  border-radius: 9999px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #344054;
+}
+
+/* Checkbox styles */
+.tableCheckbox:checked ~ span span {
+  opacity: 1;
+}
+
+.tableCheckbox:checked ~ span {
+  border-color: #465fff;
+  background-color: #465fff;
+}

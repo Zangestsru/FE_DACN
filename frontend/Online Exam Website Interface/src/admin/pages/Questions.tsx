@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import PageMeta from "../components/common/PageMeta";
 import { Table, TableHeader, TableBody, TableRow, TableCell } from "../components/ui/table";
+import FlyonDataTableWrapper from "../../teacher/components/ui/table/FlyonDataTableWrapper";
 import Button from "../components/ui/button/Button";
 import { Modal } from "../components/ui/modal";
 import { questionsService, type QuestionBankResponse, type CreateQuestionBankRequest, type UpdateQuestionBankRequest } from "../services/questions.service";
@@ -246,15 +247,20 @@ export default function Questions() {
           </div>
         )}
 
-        <div className="overflow-x-auto rounded-xl ring-1 ring-gray-200 dark:ring-gray-800">
+        <FlyonDataTableWrapper pageLength={10} selecting selectAllSelector="#adm-q-checkbox-all">
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-50 dark:bg-gray-800/50">
+                <TableCell isHeader className="w-4 pr-0 --exclude-from-ordering">
+                  <div className="flex h-5">
+                    <input id="adm-q-checkbox-all" type="checkbox" className="checkbox checkbox-sm" />
+                    <label htmlFor="adm-q-checkbox-all" className="sr-only">Checkbox</label>
+                  </div>
+                </TableCell>
                 <TableCell isHeader className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Câu hỏi</TableCell>
                 <TableCell isHeader className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tags</TableCell>
                 <TableCell isHeader className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Loại</TableCell>
                 <TableCell isHeader className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Độ khó</TableCell>
-                <TableCell isHeader className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Điểm</TableCell>
                 <TableCell isHeader className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</TableCell>
               </TableRow>
             </TableHeader>
@@ -276,7 +282,13 @@ export default function Questions() {
                 </TableRow>
               ) : (
                 filteredQuestions.map((question) => (
-                  <TableRow key={question.questionId} className="border-t border-gray-100 dark:border-gray-800">
+                  <TableRow key={question.questionId} className="border-t border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/40">
+                    <TableCell className="w-4 pr-0">
+                      <div className="flex h-5 items-center">
+                        <input id={`adm-q-row-${question.questionId}`} type="checkbox" className="checkbox checkbox-sm" data-datatable-row-selecting-individual="" />
+                        <label htmlFor={`adm-q-row-${question.questionId}`} className="sr-only">Checkbox</label>
+                      </div>
+                    </TableCell>
                     <TableCell className="px-6 py-4">
                       <div className="max-w-xs">
                         <div className="font-medium text-gray-900 dark:text-white truncate">
@@ -298,16 +310,16 @@ export default function Questions() {
                     </TableCell>
                     <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">{question.marks ?? 0}</TableCell>
                     <TableCell className="px-6 py-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button size="sm" variant="outline" onClick={() => openView(question)}>
-                          Xem
-                        </Button>
-                        <Button size="sm" variant="outline" onClick={() => openEdit(question)}>
-                          Sửa
-                        </Button>
-                        <Button size="sm" className="!bg-red-500 hover:!bg-red-600" onClick={() => openDelete(question)}>
-                          Xóa
-                        </Button>
+                      <div className="flex items-center justify-end gap-1">
+                        <button className="btn btn-circle btn-text" aria-label="Xem" onClick={() => openView(question)}>
+                          <span className="icon-[tabler--eye] size-5"></span>
+                        </button>
+                        <button className="btn btn-circle btn-text" aria-label="Sửa" onClick={() => openEdit(question)}>
+                          <span className="icon-[tabler--pencil] size-5"></span>
+                        </button>
+                        <button className="btn btn-circle btn-text" aria-label="Xóa" onClick={() => openDelete(question)}>
+                          <span className="icon-[tabler--trash] size-5"></span>
+                        </button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -315,7 +327,7 @@ export default function Questions() {
               )}
             </TableBody>
           </Table>
-        </div>
+        </FlyonDataTableWrapper>
       </div>
 
       {/* Modal xem chi tiết */}

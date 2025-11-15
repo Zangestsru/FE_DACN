@@ -3,6 +3,7 @@
  * Xử lý tất cả các chức năng liên quan đến bài thi và chứng chỉ
  */
 
+import axios, { AxiosInstance } from 'axios';
 import { apiService } from './api.service';
 import { EXAM_ENDPOINTS, CERTIFICATION_ENDPOINTS } from '@/constants/endpoints';
 import { SUCCESS_MESSAGES } from '@/constants';
@@ -16,6 +17,45 @@ import type {
   ISubmitExamResponse,
   ICertificate,
 } from '@/types';
+
+// Create dedicated axios instance for ExamsService (port 5002)
+const examsApiClient: AxiosInstance = axios.create({
+  baseURL: 'http://localhost:5002/api',
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
+  withCredentials: true,
+});
+
+// Add request interceptor for ExamsService
+examsApiClient.interceptors.request.use(
+  (config: any) => {
+    const token = localStorage.getItem('access_token');
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    if (config.params) {
+      config.params._t = Date.now();
+    } else {
+      config.params = { _t: Date.now() };
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Add response interceptor for ExamsService
+examsApiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (import.meta.env.DEV) {
+      console.error('❌ ExamsService Error:', error.response?.status, error.config?.url);
+    }
+    return Promise.reject(error);
+  }
+);
 
 // ==================== MOCK DATA ====================
 
@@ -58,14 +98,101 @@ class ExamService {
    * @returns Promise với danh sách bài thi
    */
   async getAllExams(params?: IGetExamsRequest): Promise<IGetExamsResponse> {
-    const response = await apiService.get<IGetExamsResponse>(
-      EXAM_ENDPOINTS.LIST,
-      { params }
-    );
-    if (response && Array.isArray(response.data)) {
-      return response;
+    try {
+      console.log('🔍 getAllExams called with params:', params);
+      
+      // Map frontend params to backend params
+      const backendParams: any = {};
+      if (params?.page) backendParams.pageIndex = params.page;
+      if (params?.limit) backendParams.pageSize = params.limit;
+      if (params?.category) backendParams.subjectId = params.category; // Map category to subjectId if needed
+      
+      console.log('📤 Sending to API:', backendParams);
+      
+      // Use dedicated ExamsService client (port 5002)
+      const response = await examsApiClient.get(EXAM_ENDPOINTS.LIST, { params: backendParams });
+      
+      console.log('📥 API Response:', response.data);
+      console.log('📥 response.data.success:', response.data?.success);
+      console.log('📥 response.data.data:', response.data?.data);
+      
+      // Backend returns: { success: true, data: { items: [...], totalCount, pageIndex, pageSize, ... }, message: "..." }
+      let backendData: any;
+      if (response.data && typeof response.data === 'object') {
+        if (response.data.success && response.data.data) {
+          // Format: { success: true, data: {...} }
+          backendData = response.data.data;
+        } else if (response.data.items) {
+          // Format: { items: [...], totalCount, ... }
+          backendData = response.data;
+        } else {
+          backendData = response.data;
+        }
+      } else {
+        backendData = response.data;
+      }
+
+      // Map backend ExamListItemDto to frontend IExam
+      const mappedExams: IExam[] = (backendData?.items || []).map((item: any) => ({
+          id: item.id || item.examId,
+          title: item.title || 'Bài thi',
+          subject: item.subjectName || item.subject || '',
+          category: item.subjectName || item.category || 'Khác',
+          description: item.description || '',
+          image: '/images/background.png', // Default image
+          duration: item.durationMinutes ? `${item.durationMinutes} phút` : '60 phút',
+          questions: item.totalQuestions || 0,
+          passingScore: item.passingMark || 0,
+          difficulty: this.mapDifficulty(item.examType || ''),
+          level: item.examType || 'Entry',
+          price: 0, // Default price
+          rating: 4.5, // Default rating
+          students: 0, // Default students count
+          provider: item.teacherName || 'Hệ thống',
+          date: item.startAt ? new Date(item.startAt).toISOString() : undefined,
+          time: item.startAt ? new Date(item.startAt).toLocaleTimeString('vi-VN') : undefined,
+        }));
+
+      // Return in frontend format
+      // Backend returns: total (not totalCount), pageIndex, pageSize, totalPages
+      const result = {
+        data: mappedExams,
+        total: backendData?.total || backendData?.totalCount || 0,
+        page: backendData?.pageIndex || params?.page || 1,
+        limit: backendData?.pageSize || params?.limit || 10,
+        totalPages: backendData?.totalPages || Math.ceil((backendData?.total || 0) / (backendData?.pageSize || 10)),
+      } as IGetExamsResponse;
+      
+      console.log('✅ Returning to frontend:', result);
+      return result;
+    } catch (error) {
+      console.error('Error fetching exams:', error);
+      // Return empty response on error
+      return {
+        data: [],
+        total: 0,
+        page: params?.page || 1,
+        limit: params?.limit || 10,
+        totalPages: 0,
+      } as IGetExamsResponse;
     }
-    throw new Error('Invalid exam list response');
+  }
+
+  /**
+   * Map exam type to difficulty level
+   */
+  private mapDifficulty(examType: string): IExam['difficulty'] {
+    const type = examType.toLowerCase();
+    if (type.includes('basic') || type.includes('entry') || type.includes('cơ bản')) {
+      return 'Cơ bản';
+    }
+    if (type.includes('intermediate') || type.includes('associate') || type.includes('trung bình')) {
+      return 'Trung bình';
+    }
+    if (type.includes('advanced') || type.includes('professional') || type.includes('nâng cao')) {
+      return 'Nâng cao';
+    }
+    return 'Cơ bản';
   }
 
   /**
@@ -74,13 +201,48 @@ class ExamService {
    * @returns Promise với thông tin bài thi
    */
   async getExamById(id: string | number): Promise<IExam> {
-    const response = await apiService.get<IExam>(
-      EXAM_ENDPOINTS.GET_BY_ID(id)
-    );
-    if (response && (response as any).id !== undefined) {
-      return response;
+    try {
+      console.log('🔍 getExamById called with id:', id);
+      
+      // Use dedicated ExamsService client (port 5002)
+      const response = await examsApiClient.get(EXAM_ENDPOINTS.GET_BY_ID(id));
+      
+      console.log('📥 Exam detail response:', response.data);
+      
+      // Backend returns: { success: true, data: {...}, message: "..." }
+      const backendData = response.data?.success ? response.data.data : response.data;
+      
+      if (!backendData) {
+        throw new Error('No exam data received');
+      }
+      
+      // Map backend data to frontend format
+      const exam: IExam = {
+        id: backendData.examId || backendData.id,
+        title: backendData.title || 'Bài thi',
+        subject: backendData.courseName || backendData.subject || '',
+        category: backendData.courseName || backendData.category || 'Khác',
+        description: backendData.description || backendData.instructions || '',
+        image: '/images/background.png',
+        duration: backendData.durationMinutes ? `${backendData.durationMinutes} phút` : '60 phút',
+        questions: backendData.totalQuestions || 0,
+        passingScore: backendData.passingMark || 0,
+        difficulty: this.mapDifficulty(backendData.examType || ''),
+        level: backendData.examType || 'Entry',
+        price: 0,
+        rating: 4.5,
+        students: 0,
+        provider: backendData.createdByName || 'Hệ thống',
+        date: backendData.startAt ? new Date(backendData.startAt).toISOString() : undefined,
+        time: backendData.startAt ? new Date(backendData.startAt).toLocaleTimeString('vi-VN') : undefined,
+      };
+      
+      console.log('✅ Mapped exam:', exam);
+      return exam;
+    } catch (error) {
+      console.error('Error fetching exam detail:', error);
+      throw error;
     }
-    throw new Error('Invalid exam detail response');
   }
 
   /**
@@ -105,19 +267,30 @@ class ExamService {
   /**
    * Bắt đầu làm bài thi
    * @param examId - ID của bài thi
-   * @returns Promise với session info
+   * @returns Promise với attempt ID và thông tin bài thi
    */
-  async startExam(examId: string | number): Promise<{ sessionId: string; startTime: string }> {
-    // TODO: Uncomment khi có API thật
-    // const response = await apiService.post<{ sessionId: string; startTime: string }>(
-    //   EXAM_ENDPOINTS.START(examId)
-    // );
-
-    // Mock response
-    return Promise.resolve({
-      sessionId: 'session-' + Date.now(),
-      startTime: new Date().toISOString(),
-    });
+  async startExam(examId: string | number): Promise<any> {
+    try {
+      console.log('🚀 startExam called with examId:', examId);
+      
+      // Use dedicated ExamsService client (port 5002)
+      const response = await examsApiClient.post(`/Exams/${examId}/start`, {
+        variantCode: null, // Optional
+      });
+      
+      console.log('📥 Start exam response:', response.data);
+      
+      // Backend returns: { success: true, data: StartExamResponse, message: "..." }
+      const backendData = response.data?.success ? response.data.data : response.data;
+      
+      return backendData;
+    } catch (error: any) {
+      console.error('❌ Error starting exam:', error);
+      
+      // Extract error message from backend
+      const errorMessage = error.response?.data?.message || error.message || 'Không thể bắt đầu bài thi';
+      throw new Error(errorMessage);
+    }
   }
 
   /**

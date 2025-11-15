@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import PageMeta from "../components/common/PageMeta";
 import { Table, TableHeader, TableBody, TableRow, TableCell } from "../components/ui/table";
+import FlyonDataTableWrapper from "../components/ui/table/FlyonDataTableWrapper";
 import Button from "../components/ui/button/Button";
 import { PencilIcon, TrashBinIcon } from "../../admin/icons";
 import { Modal } from "../components/ui/modal";
@@ -149,10 +150,16 @@ export default function Exams() {
           <Button onClick={() => { setCreateForm({ id: "", name: "", subject: "", date: new Date().toISOString().split("T")[0], duration: 60, totalMarks: 10, questionsCount: 10, status: "draft" }); setIsCreateOpen(true); }}>Tạo Bài Thi Mới</Button>
         </div>
 
-        <div className="overflow-x-auto rounded-xl ring-1 ring-gray-200 dark:ring-gray-800">
+        <FlyonDataTableWrapper pageLength={10} selecting selectAllSelector="#ex-checkbox-all">
           <Table className="min-w-full table-fixed">
             <TableHeader>
               <TableRow className="bg-gray-50 dark:bg-gray-800/50">
+                <TableCell isHeader className="w-4 pr-0">
+                  <div className="flex h-5">
+                    <input id="ex-checkbox-all" type="checkbox" className="checkbox checkbox-sm" />
+                    <label htmlFor="ex-checkbox-all" className="sr-only">Checkbox</label>
+                  </div>
+                </TableCell>
                 <TableCell isHeader className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Tên bài thi</TableCell>
                 <TableCell isHeader className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Môn học</TableCell>
                 <TableCell isHeader className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Ngày thi</TableCell>
@@ -165,7 +172,13 @@ export default function Exams() {
             </TableHeader>
             <TableBody>
               {list.map((e) => (
-                <TableRow key={e.id} className="border-t border-gray-100 dark:border-gray-800">
+                <TableRow key={e.id} className="border-t border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/40">
+                  <TableCell className="w-4 pr-0">
+                    <div className="flex h-5 items-center">
+                      <input id={`ex-row-${e.id}`} type="checkbox" className="checkbox checkbox-sm" data-datatable-row-selecting-individual="" />
+                      <label htmlFor={`ex-row-${e.id}`} className="sr-only">Checkbox</label>
+                    </div>
+                  </TableCell>
                   <TableCell className="px-4 py-3 text-sm text-gray-900 dark:text-white">{e.name}</TableCell>
                   <TableCell className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{e.subject}</TableCell>
                   <TableCell className="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{e.date}</TableCell>
@@ -181,19 +194,19 @@ export default function Exams() {
                   </TableCell>
                   <TableCell className="px-4 py-3 w-48">
                     <div className="flex items-center justify-end gap-1">
-                      <Button size="sm" variant="outline" startIcon={<PencilIcon className="h-3 w-3" />} onClick={() => openEdit(e)} className="!border-gray-300 !text-gray-700 hover:!bg-gray-50 hover:!border-gray-400 transition-all duration-200 whitespace-nowrap text-xs px-2 py-1">
-                        Sửa
-                      </Button>
-                      <Button size="sm" variant="outline" startIcon={<TrashBinIcon className="h-3 w-3" />} onClick={() => openDelete(e)} className="!border-red-300 !text-red-600 hover:!bg-red-50 hover:!border-red-400 transition-all duration-200 whitespace-nowrap text-xs px-2 py-1">
-                        Xóa
-                      </Button>
+                      <button className="btn btn-circle btn-text" aria-label="Sửa" onClick={() => openEdit(e)}>
+                        <PencilIcon className="size-5" />
+                      </button>
+                      <button className="btn btn-circle btn-text" aria-label="Xóa" onClick={() => openDelete(e)}>
+                        <TrashBinIcon className="size-5" />
+                      </button>
                     </div>
                   </TableCell>
-                </TableRow>
+              </TableRow>
               ))}
             </TableBody>
           </Table>
-        </div>
+        </FlyonDataTableWrapper>
 
         {/* Modal sửa bài thi */}
         <Modal isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} className="max-w-xl p-6">
@@ -282,7 +295,7 @@ export default function Exams() {
               <p>Bạn có chắc chắn muốn xóa bài thi "{selected.name}"?</p>
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setIsDeleteOpen(false)}>Hủy</Button>
-                <Button className="!bg-red-600 hover:!bg-red-700" onClick={confirmDelete}>Xóa</Button>
+                <Button className="bg-red-600! hover:bg-red-700!" onClick={confirmDelete}>Xóa</Button>
               </div>
             </div>
           )}

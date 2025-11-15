@@ -93,6 +93,14 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     };
 
     loadAuthState();
+    const handleLoggedIn = () => loadAuthState();
+    const handleLoggedOut = () => loadAuthState();
+    window.addEventListener('auth:logged-in', handleLoggedIn);
+    window.addEventListener('auth:logged-out', handleLoggedOut);
+    return () => {
+      window.removeEventListener('auth:logged-in', handleLoggedIn);
+      window.removeEventListener('auth:logged-out', handleLoggedOut);
+    };
   }, []);
 
   /**
@@ -202,6 +210,8 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
+      const storedToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
+      setToken(storedToken || null);
     } catch (error) {
       console.error('Error refreshing user:', error);
     }

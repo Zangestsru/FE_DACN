@@ -113,12 +113,12 @@ export default function StudentEnrollmentChart() {
   ];
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="mb-4">
+    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Thống kê Đăng ký Học sinh
+          📈 Thống kê Đăng ký Học sinh
         </h3>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Theo dõi xu hướng đăng ký và hoạt động của học sinh
         </p>
       </div>

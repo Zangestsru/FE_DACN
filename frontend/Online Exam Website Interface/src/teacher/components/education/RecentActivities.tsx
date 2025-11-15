@@ -84,36 +84,50 @@ export default function RecentActivities() {
   };
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Hoạt động Gần đây
-        </h3>
-        <button className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
-          Xem tất cả
+    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Hoạt động Gần đây
+          </h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Theo dõi hoạt động mới nhất của học sinh
+          </p>
+        </div>
+        <button className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
+          Xem tất cả →
         </button>
       </div>
       
       <div className="space-y-4">
-        {activities.map((activity) => (
-          <div key={activity.id} className="flex items-start space-x-3">
-            <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${getActivityColor(activity.type)}`}>
+        {activities.map((activity, index) => (
+          <div 
+            key={activity.id} 
+            className={`flex items-start space-x-3 pb-4 ${
+              index !== activities.length - 1 ? 'border-b border-gray-100 dark:border-gray-800' : ''
+            }`}
+          >
+            <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center ${getActivityColor(activity.type)} transition-all duration-300 hover:scale-110`}>
               {getActivityIcon(activity.type)}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">
                 {activity.title}
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                 {activity.description}
               </p>
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                {activity.time}
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 flex items-center gap-1">
+                <span>🕐</span> {activity.time}
               </p>
             </div>
           </div>
         ))}
       </div>
+      
+      <button className="mt-4 w-full py-2 px-4 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
+        Tải thêm hoạt động
+      </button>
     </div>
   );
 }

@@ -61,49 +61,58 @@ export default function ExamResults() {
   };
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Kết quả Thi gần đây
-        </h3>
-        <button className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
-          Xem chi tiết
+    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            📊 Kết quả Thi gần đây
+          </h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Tổng hợp kết quả các kỳ thi mới nhất
+          </p>
+        </div>
+        <button className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
+          Xem chi tiết →
         </button>
       </div>
       
-      <div className="space-y-4">
+      <div className="grid gap-4 sm:grid-cols-2 md:gap-6">
         {examResults.map((result) => (
-          <div key={result.id} className="border-l-4 border-blue-500 pl-4 py-2">
-            <div className="flex items-center justify-between mb-2">
-              <div>
-                <h4 className="text-sm font-medium text-gray-900 dark:text-white">
-                  {result.subject} - {result.class}
-                </h4>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {new Date(result.date).toLocaleDateString('vi-VN')}
-                </p>
-              </div>
-              <span className={`text-sm font-semibold ${getScoreColor(result.averageScore)}`}>
-                {result.averageScore}/10
-              </span>
-            </div>
+          <div key={result.id} className="relative overflow-hidden rounded-xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-4 transition-all duration-300 hover:shadow-lg dark:border-gray-800 dark:from-gray-800 dark:to-gray-900">
+            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-blue-500 opacity-5"></div>
             
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-gray-500 dark:text-gray-400">
-                {result.totalStudents} học sinh
-              </span>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPassRateColor(result.passRate)}`}>
-                {result.passRate}% đạt
-              </span>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+                    {result.subject}
+                  </h4>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    Lớp {result.class} • {new Date(result.date).toLocaleDateString('vi-VN')}
+                  </p>
+                </div>
+                <div className={`flex h-12 w-12 items-center justify-center rounded-lg text-lg font-bold ${getScoreColor(result.averageScore).replace('text-', 'bg-').replace('600', '100').replace('400', '900/20')} ${getScoreColor(result.averageScore)}`}>
+                  {result.averageScore}
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between text-xs">
+                <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+                  👥 {result.totalStudents} học sinh
+                </span>
+                <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${getPassRateColor(result.passRate)}`}>
+                  ✓ {result.passRate}% đạt
+                </span>
+              </div>
             </div>
           </div>
         ))}
       </div>
       
-      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-500 dark:text-gray-400">Điểm trung bình chung:</span>
-          <span className="font-semibold text-gray-900 dark:text-white">7.9/10</span>
+      <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Điểm trung bình chung:</span>
+          <span className="text-xl font-bold text-gray-900 dark:text-white">7.9<span className="text-sm text-gray-500">/10</span></span>
         </div>
       </div>
     </div>

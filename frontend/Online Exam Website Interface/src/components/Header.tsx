@@ -284,11 +284,7 @@ export const Header: React.FC<HeaderProps> = ({
                             <button
                               className="btn btn-link w-100 text-start"
                               style={{ textDecoration: 'none' }}
-                              onClick={() => {
-                               
-                                alert('');
-                                closeUserMenu();
-                              }}
+                              onClick={() => { navigate('/admin/'); closeUserMenu(); }}
                             >
                               Quản trị
                             </button>
@@ -479,7 +475,12 @@ export const Header: React.FC<HeaderProps> = ({
                       </svg>
                       <span>{isAuthenticated ? (user?.fullName || user?.username || user?.email) : 'Người dùng'}</span>
                     </div>
-                    {/* Các mục lịch sử cho mobile */}
+                    {/* Các mục cho mobile */}
+                    {isAdminUser && (
+                      <button className="btn btn-light w-100 mb-2" onClick={() => { navigate('/admin/'); toggleMobileMenu(); }}>
+                        Quản trị
+                      </button>
+                    )}
                     {isTeacherUser && (
                       <button className="btn btn-light w-100 mb-2" onClick={() => { navigate('/teacher/'); toggleMobileMenu(); }}>
                         Quản lý

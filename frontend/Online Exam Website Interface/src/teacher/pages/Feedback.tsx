@@ -349,12 +349,12 @@ export default function Feedback() {
                         </Button>
                       )}
                       {feedback.status === "responded" && (
-                        <Button size="sm" className="!bg-green-500 hover:!bg-green-600" startIcon={<CheckCircleIcon className="h-4 w-4" />} onClick={() => markAsResolved(feedback)}>
+                        <Button size="sm" className="bg-green-500! hover:bg-green-600!" startIcon={<CheckCircleIcon className="h-4 w-4" />} onClick={() => markAsResolved(feedback)}>
                           Giải quyết
                         </Button>
                       )}
                       {(feedback.status === "pending" || feedback.status === "responded") && (
-                        <Button size="sm" className="!bg-gray-500 hover:!bg-gray-600" startIcon={<CloseIcon className="h-4 w-4" />} onClick={() => markAsDismissed(feedback)}>
+                        <Button size="sm" className="bg-gray-500! hover:bg-gray-600!" startIcon={<CloseIcon className="h-4 w-4" />} onClick={() => markAsDismissed(feedback)}>
                           Bỏ qua
                         </Button>
                       )}

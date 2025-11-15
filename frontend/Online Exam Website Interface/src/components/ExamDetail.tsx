@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { ICertificationExam } from '@/types';
 import { useExamDetail } from '@/hooks';
 
 interface ExamDetailProps {
-  exam: ICertificationExam | null;
   onBackToList: () => void;
-  onRegister: () => void;
+  onRegister: (examId: string) => void;
+  onStartExam: (examId: string) => void;
 }
 
-export const ExamDetail: React.FC<ExamDetailProps> = ({ exam: examProp, onBackToList, onRegister }) => {
+export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister, onStartExam }) => {
   const [showPromoModal, setShowPromoModal] = useState(false);
+  const { examId } = useParams<{ examId: string }>();
 
-  // Sử dụng hook để lấy chi tiết exam nếu có ID
-  const examId = examProp?.id;
+  // Sử dụng hook để lấy chi tiết exam từ URL params
   const { data: examDetailData, loading, error } = useExamDetail(examId as string);
 
-  // Ưu tiên dùng data từ hook, fallback về prop
-  const exam = examDetailData || examProp;
+  // Dùng data từ hook
+  const exam = examDetailData;
 
   useEffect(() => {
     // Show promo modal after 2 seconds
@@ -250,7 +251,7 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ exam: examProp, onBackTo
                         padding: '12px 24px',
                         boxShadow: '0 4px 8px rgba(26, 75, 140, 0.3)'
                       }}
-                      onClick={onRegister}
+                      onClick={() => examId && onStartExam(examId)}
                     >
                       Đăng ký thi ngay
                     </button>

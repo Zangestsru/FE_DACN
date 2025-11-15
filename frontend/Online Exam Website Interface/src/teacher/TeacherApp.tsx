@@ -1,4 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
+import '@/teacher/index.css';
+ 
 import AppLayout from '@/teacher/layout/AppLayout';
 import { ScrollToTop } from '@/teacher/components/common/ScrollToTop';
 import { ThemeProvider } from '@/teacher/context/ThemeContext';
