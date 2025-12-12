@@ -1,0 +1,477 @@
+/* Responsive Fixes for Online Exam Website */
+
+/* Base responsive settings */
+:root {
+  --header-height: 64px;
+  --footer-height: auto;
+  --content-min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  
+  /* Responsive breakpoints */
+  --mobile: 480px;
+  --tablet: 768px;
+  --desktop: 1024px;
+  --widescreen: 1280px;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  
+  /* Typography */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  
+  /* Container widths */
+  --container-sm: 100%;
+  --container-md: 720px;
+  --container-lg: 960px;
+  --container-xl: 1140px;
+  --container-xxl: 1320px;
+}
+
+/* iPad and tablet specific fixes */
+@media only screen 
+and (min-device-width: 768px) 
+and (max-device-width: 1024px) {
+  html, body {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto !important;
+    height: auto !important;
+    position: relative !important;
+  }
+
+  .exam-container {
+    height: auto !important;
+    min-height: calc(100vh - var(--header-height));
+    padding-bottom: 70px;
+    position: relative !important;
+    transform: none !important;
+  }
+
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 10px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    transform: none !important;
+  }
+}
+
+/* Handle zoomed state */
+@media only screen 
+and (min-device-width: 768px) 
+and (max-device-width: 1024px)
+and (-webkit-min-device-pixel-ratio: 2) {
+  body {
+    -webkit-text-size-adjust: none;
+  }
+
+  .exam-container * {
+    transform: none !important;
+  }
+}
+
+/* Responsive container */
+.container {
+  width: 100%;
+  padding-right: var(--space-md);
+  padding-left: var(--space-md);
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 100%;
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+
+/* Responsive typography */
+h1, .h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.2; }
+h2, .h2 { font-size: clamp(1.75rem, 4.5vw, 2.5rem); line-height: 1.25; }
+h3, .h3 { font-size: clamp(1.5rem, 4vw, 2rem); line-height: 1.3; }
+h4, .h4 { font-size: clamp(1.25rem, 3.5vw, 1.75rem); line-height: 1.35; }
+h5, .h5 { font-size: clamp(1.125rem, 3vw, 1.5rem); line-height: 1.4; }
+h6, .h6 { font-size: clamp(1rem, 2.5vw, 1.25rem); line-height: 1.45; }
+
+/* Responsive images */
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Responsive iframes */
+.embed-responsive {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.embed-responsive::before {
+  display: block;
+  content: "";
+}
+
+.embed-responsive-16by9::before {
+  padding-top: 56.25%;
+}
+
+.embed-responsive-item {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Responsive utilities */
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 767px) {
+  .hidden-mobile {
+    display: none !important;
+  }
+  
+  .visible-mobile {
+    display: block !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hidden-tablet {
+    display: none !important;
+  }
+  
+  .visible-tablet {
+    display: block !important;
+  }
+}
+
+/* iPad-specific adjustments (portrait and landscape variants)
+   Targets common iPad viewport widths: portrait ~768px and landscape up to 1024px.
+*/
+@media (min-width: 720px) and (max-width: 834px) {
+  /* Header: reduce paddings and allow wrapping controls */
+  .bg-dark.p-3.d-flex.align-items-center.justify-content-between,
+  .bg-dark.text-white.p-3.d-flex.align-items-center.justify-content-between {
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .bg-dark .d-flex.align-items-center > h5 {
+    font-size: 1rem;
+  }
+
+  /* Progress bar smaller on iPad portrait */
+  .progress.me-3 {
+    width: 90px !important;
+    height: 7px !important;
+  }
+
+  /* Main layout: make sidebar slimmer and allow content to take majority */
+  .bg-white.border-start {
+    width: 340px !important;
+    min-width: 260px !important;
+  }
+
+  /* Ensure iframe keeps aspect ratio and is visible inside the container */
+  .flex-grow-1.position-relative > iframe,
+  .flex-grow-1.position-relative > .embed-responsive-item {
+    height: calc(100vh - 160px) !important; /* leave room for header/footer controls */
+  }
+
+  /* Bottom controls: stack if needed */
+  .bg-dark.text-white.p-3 .d-flex.align-items-center.justify-content-between {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+@media (min-width: 835px) and (max-width: 1024px) {
+  /* iPad landscape: give more room to video and slightly reduce sidebar */
+  .bg-white.border-start {
+    width: 360px !important;
+    min-width: 320px !important;
+  }
+
+  .progress.me-3 {
+    width: 110px !important;
+    height: 8px !important;
+  }
+
+  /* Ensure iframe fills the available area without overflow */
+  .flex-grow-1.position-relative > iframe {
+    height: calc(100vh - 140px) !important;
+  }
+
+  /* Adjust the playlist cards inside sidebar for better readability */
+  .bg-white .p-3.border.rounded.mb-2 {
+    padding: 0.75rem;
+  }
+}
+
+/* Default sidebar sizing for study lesson; can be overridden by media queries above */
+.study-sidebar {
+  width: 400px;
+  min-width: 400px;
+  transition: width 150ms ease-in-out;
+}
+
+/* When sidebar is hidden (component toggles class by removing the element), ensure content expands naturally */
+.flex-grow-1.w-100 {
+  width: 100% !important;
+}
+
+@media (min-width: 1024px) {
+  .hidden-desktop {
+    display: none !important;
+  }
+  
+  .visible-desktop {
+    display: block !important;
+  }
+}
+
+/* Responsive spacing utilities */
+.mt-auto { margin-top: auto; }
+.mb-auto { margin-bottom: auto; }
+.ml-auto { margin-left: auto; }
+.mr-auto { margin-right: auto; }
+
+/* Responsive text alignment */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+@media (min-width: 768px) {
+  .text-md-center { text-align: center; }
+  .text-md-left { text-align: left; }
+  .text-md-right { text-align: right; }
+}
+
+/* Responsive flex utilities */
+.d-flex { display: flex; }
+.flex-column { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-nowrap { flex-wrap: nowrap; }
+.justify-content-start { justify-content: flex-start; }
+.justify-content-end { justify-content: flex-end; }
+.justify-content-center { justify-content: center; }
+.justify-content-between { justify-content: space-between; }
+.align-items-start { align-items: flex-start; }
+.align-items-end { align-items: flex-end; }
+.align-items-center { align-items: center; }
+.align-items-baseline { align-items: baseline; }
+.align-items-stretch { align-items: stretch; }
+
+/* Responsive grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+/* Responsive navigation */
+.navbar-toggler {
+  padding: 0.5rem 0.75rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+/* Responsive tables */
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Responsive forms */
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-control {
+    transition: none;
+  }
+}
+
+/* Responsive buttons */
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}
+
+/* Responsive cards */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}
+
+.card-body {
+  flex: 1 1 auto;
+  padding: 1.25rem;
+}
+
+/* Responsive utilities for spacing */
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+.mt-4 { margin-top: 1.5rem; }
+.mt-5 { margin-top: 3rem; }
+
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+.mb-5 { margin-bottom: 3rem; }
+
+.pt-1 { padding-top: 0.25rem; }
+.pt-2 { padding-top: 0.5rem; }
+.pt-3 { padding-top: 1rem; }
+.pt-4 { padding-top: 1.5rem; }
+.pt-5 { padding-top: 3rem; }
+
+.pb-1 { padding-bottom: 0.25rem; }
+.pb-2 { padding-bottom: 0.5rem; }
+.pb-3 { padding-bottom: 1rem; }
+.pb-4 { padding-bottom: 1.5rem; }
+.pb-5 { padding-bottom: 3rem; }
+
+/* Responsive visibility */
+.visible {
+  visibility: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+/* Print utilities */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+  
+  body {
+    padding: 0.5in;
+    font-size: 12pt;
+    color: #000;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  
+  img, tr, pre, blockquote, ul, ol, dl, figure, .table-responsive {
+    page-break-inside: avoid;
+  }
+  
+  thead {
+    display: table-header-group;
+  }
+  
+  img {
+    max-width: 100% !important;
+  }
+  
+  @page {
+    margin: 0.5in;
+  }
+}
