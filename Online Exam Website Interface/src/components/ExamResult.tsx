@@ -325,12 +325,22 @@ const ExamResult: React.FC<ExamResultProps> = ({ onBackToHome }) => {
 
                       let content = qr.content || qr.Content || (examQuestion?.content || examQuestion?.Content || `Câu hỏi ${index + 1}`);
 
+                      // ✅ Build correctOptionIds from API response or fallback to extracting from options
+                      let correctOptionIds = qr.correctOptionIds || qr.CorrectOptionIds || [];
+                      if ((!correctOptionIds || correctOptionIds.length === 0) && options.length > 0) {
+                        // Fallback: extract correctOptionIds from options where isCorrect is true
+                        correctOptionIds = options
+                          .filter((opt: any) => opt.isCorrect === true || opt.IsCorrect === true)
+                          .map((opt: any) => Number(opt.optionId || opt.OptionId));
+                        console.log(`📋 Built correctOptionIds from options for question ${qId}:`, correctOptionIds);
+                      }
+
                       return {
                         questionId: qId,
                         content,
                         isCorrect: qr.isCorrect || qr.IsCorrect,
-                        selectedOptionIds: qr.selectedOptionIds || qr.SelectedOptionIds || [],
-                        correctOptionIds: qr.correctOptionIds || qr.CorrectOptionIds || [],
+                        selectedOptionIds: (qr.selectedOptionIds || qr.SelectedOptionIds || []).map((id: any) => Number(id)),
+                        correctOptionIds: correctOptionIds.map((id: any) => Number(id)),
                         options,
                         textAnswer: qr.textAnswer || qr.TextAnswer,
                         correctTextAnswer: qr.correctTextAnswer || qr.CorrectTextAnswer,
@@ -363,58 +373,104 @@ const ExamResult: React.FC<ExamResultProps> = ({ onBackToHome }) => {
                     });
                   }
 
-                  return questionsToDisplay.map((q: any, idx: number) => (
-                    <div key={idx} className="card border-0 shadow-sm rounded-4 mb-3">
-                      <div className={`card-body p-4 border-start border-5 ${q.isCorrect ? 'border-success' : 'border-danger'}`}>
-                        <div className="d-flex gap-3">
-                          <span className={`badge rounded-pill align-self-start ${q.isCorrect ? 'bg-success' : 'bg-danger'}`}>
-                            Câu {idx + 1}
-                          </span>
-                          <div className="flex-grow-1">
-                            <h6 className="fw-bold mb-3">{q.content}</h6>
-                            <div className="d-flex flex-column gap-2">
-                              {q.options.map((opt: any) => {
-                                const optId = Number(opt.optionId || opt.OptionId);
-                                const isSelected = q.selectedOptionIds.includes(optId);
-                                const isCorrectOpt = q.correctOptionIds.includes(optId);
+                  return questionsToDisplay.map((q: any, idx: number) => {
+                    // Recompute isCorrect on frontend based on selectedOptionIds vs correctOptionIds
+                    const selectedSet = new Set(q.selectedOptionIds);
+                    const correctSet = new Set(q.correctOptionIds);
+                    const questionIsCorrect = correctSet.size > 0 &&
+                      selectedSet.size === correctSet.size &&
+                      [...correctSet].every(id => selectedSet.has(id));
 
-                                let optClass = "p-2 rounded border";
-                                let icon = null;
-
-                                if (isCorrectOpt) {
-                                  optClass = "p-2 rounded border border-success bg-success-subtle text-success-emphasis fw-medium";
-                                  icon = <i className="bi bi-check-circle-fill ms-auto"></i>;
-                                } else if (isSelected && !isCorrectOpt) {
-                                  optClass = "p-2 rounded border border-danger bg-danger-subtle text-danger-emphasis";
-                                  icon = <i className="bi bi-x-circle-fill ms-auto"></i>;
-                                } else {
-                                  optClass = "p-2 rounded border bg-light text-muted";
-                                }
-
-                                return (
-                                  <div key={optId} className={`d-flex align-items-center ${optClass}`}>
-                                    <span>{opt.content || opt.Content}</span>
-                                    {icon}
-                                  </div>
-                                );
-                              })}
-
-                              {q.textAnswer && (
-                                <div className="mt-2 p-3 bg-white rounded border">
-                                  <strong>Câu trả lời của bạn:</strong> {q.textAnswer}
-                                </div>
-                              )}
-                              {q.correctTextAnswer && !q.isCorrect && (
-                                <div className="mt-2 p-3 bg-success-subtle rounded border border-success text-success-emphasis">
-                                  <strong>Đáp án đúng:</strong> {q.correctTextAnswer}
-                                </div>
-                              )}
-                            </div>
+                    return (
+                      <div key={idx} className="card border-0 shadow-sm rounded-4 mb-4">
+                        <div className="card-body p-4">
+                          {/* Question Header */}
+                          <div className="d-flex justify-content-between align-items-start mb-3">
+                            <h6 className="fw-bold mb-0">
+                              <span className="text-muted">Câu {idx + 1}:</span> {q.content}
+                            </h6>
+                            <span className={`badge ${questionIsCorrect ? 'bg-success' : 'bg-danger'}`}>
+                              Điểm: {questionIsCorrect ? '1' : '0'}
+                            </span>
                           </div>
+
+                          {/* Options */}
+                          <div className="d-flex flex-column gap-2">
+                            {q.options.map((opt: any) => {
+                              const optId = Number(opt.optionId || opt.OptionId);
+                              const isSelected = q.selectedOptionIds.includes(optId);
+                              const isCorrectOpt = q.correctOptionIds.includes(optId);
+
+                              let optClass = "p-3 rounded d-flex align-items-center";
+                              let label = null;
+                              let bgStyle: any = {};
+
+                              if (isSelected && isCorrectOpt) {
+                                // User selected this option and it's correct -> GREEN
+                                optClass += " text-success fw-medium";
+                                bgStyle = { backgroundColor: '#d1fae5' };
+                                label = <span className="ms-2">✓ Đúng</span>;
+                              } else if (isSelected && !isCorrectOpt) {
+                                // User selected this option but it's wrong -> RED
+                                optClass += " text-danger";
+                                bgStyle = { backgroundColor: '#fee2e2' };
+                                label = <span className="ms-2 fw-medium">✗ Sai</span>;
+                              } else if (isCorrectOpt && !questionIsCorrect) {
+                                // This is the correct answer but user didn't select it -> show as correct
+                                optClass += " text-success fw-medium";
+                                bgStyle = { backgroundColor: '#d1fae5' };
+                                label = <span className="ms-2">✓ Đúng</span>;
+                              } else {
+                                // Neutral option
+                                optClass += " border";
+                              }
+
+                              return (
+                                <div key={optId} className={optClass} style={bgStyle}>
+                                  {/* Radio indicator */}
+                                  <span
+                                    className="me-2 d-flex align-items-center justify-content-center"
+                                    style={{
+                                      width: '18px',
+                                      height: '18px',
+                                      borderRadius: '50%',
+                                      border: isSelected ? '2px solid #3b82f6' : '2px solid #d1d5db',
+                                      backgroundColor: isSelected ? '#3b82f6' : 'transparent'
+                                    }}
+                                  >
+                                    {isSelected && (
+                                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'white' }}></span>
+                                    )}
+                                  </span>
+                                  <span>{opt.content || opt.Content}</span>
+                                  {label}
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* Result note */}
+                          {questionIsCorrect ? (
+                            <div className="mt-3 p-3 rounded" style={{ backgroundColor: '#d1fae5' }}>
+                              <span className="fw-bold text-success">Kết quả:</span>{' '}
+                              <span className="text-success">Bạn đã trả lời đúng!</span>
+                            </div>
+                          ) : (
+                            <div className="mt-3 p-3 rounded" style={{ backgroundColor: '#dbeafe' }}>
+                              <span className="fw-bold text-primary">Kết quả:</span>{' '}
+                              <span>Bạn đã trả lời sai. Hãy xem lại đáp án đúng được đánh dấu màu xanh.</span>
+                            </div>
+                          )}
+
+                          {q.textAnswer && (
+                            <div className="mt-2 p-3 bg-white rounded border">
+                              <strong>Câu trả lời của bạn:</strong> {q.textAnswer}
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                  ));
+                    );
+                  });
                 })()}
               </div>
             )}

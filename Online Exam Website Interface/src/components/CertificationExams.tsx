@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { IExam } from '@/types';
 import { useExams } from '@/hooks';
@@ -9,13 +10,23 @@ interface CertificationExamsProps {
 }
 
 export const CertificationExams: React.FC<CertificationExamsProps> = ({ onExamSelect }) => {
+  const [searchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedLevel, setSelectedLevel] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchParams.get('q') || '');
   const [examRatings, setExamRatings] = useState<Record<string | number, { rating: number; count: number }>>({});
   const itemsPerPage = 6;
+
+  // Listen to URL changes for search query
+  useEffect(() => {
+    const queryFromUrl = searchParams.get('q');
+    if (queryFromUrl !== null && queryFromUrl !== searchQuery) {
+      setSearchQuery(queryFromUrl);
+      setDebouncedSearchQuery(queryFromUrl);
+    }
+  }, [searchParams]);
 
   // Debounce search query (wait 500ms after user stops typing)
   useEffect(() => {
@@ -470,8 +481,7 @@ export const CertificationExams: React.FC<CertificationExamsProps> = ({ onExamSe
                   
                   <div className="card-content">
                     <div className="card-header-info">
-                      <h3 className="card-title">{exam.title}</h3>
-                      <div className="d-flex gap-2 flex-wrap">
+                      <div className="d-flex gap-2 flex-wrap mb-2">
                         <span className={`difficulty-pill pill-${getDifficultyColor(exam.difficulty || 'Cơ bản')}`}>
                           {exam.difficulty || 'Cơ bản'}
                         </span>
@@ -482,6 +492,7 @@ export const CertificationExams: React.FC<CertificationExamsProps> = ({ onExamSe
                           </span>
                         )}
                       </div>
+                      <h3 className="card-title" title={exam.title}>{exam.title}</h3>
                     </div>
                     
                     <p className="card-description">{exam.description}</p>

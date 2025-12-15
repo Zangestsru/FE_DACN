@@ -45,7 +45,7 @@ class ChatService {
   private async _connect(): Promise<void> {
     try {
       const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
-      
+
       if (!token) {
         console.warn('No access token found. Cannot connect to chat hub.');
         return;
@@ -71,10 +71,12 @@ class ChatService {
       // Set up event handlers
       this.setupEventHandlers();
 
-      // Start connection
-      await this.connection.start();
-      console.log('✅ SignalR Connected');
-      
+      // Start connection only if disconnected
+      if (this.connection.state === signalR.HubConnectionState.Disconnected) {
+        await this.connection.start();
+        console.log('✅ SignalR Connected');
+      }
+
       this.connectionPromise = null;
     } catch (error) {
       console.error('❌ SignalR Connection Error:', error);
@@ -102,30 +104,36 @@ class ChatService {
   private setupEventHandlers(): void {
     if (!this.connection) return;
 
-    // Nhận tin nhắn mới
-    this.connection.on('ReceiveMessage', (message: ChatMessage) => {
+    // Nhận tin nhắn mới (lowercase)
+    this.connection.on('receivemessage', (message: ChatMessage) => {
       console.log('📨 New message received:', message);
       this.notifyMessageListeners(message);
     });
 
+    // Fallback for PascalCase
+    this.connection.on('ReceiveMessage', (message: ChatMessage) => {
+      console.log('📨 New message received (Pascal):', message);
+      this.notifyMessageListeners(message);
+    });
+
     // User đang typing
-    this.connection.on('UserStartedTyping', (data: { userId: number; userName: string; roomId: number }) => {
+    this.connection.on('userstartedtyping', (data: { userId: number; userName: string; roomId: number }) => {
       console.log('⌨️ User started typing:', data);
       this.typingCallbacks.forEach(callback => callback(data));
     });
 
     // User ngừng typing
-    this.connection.on('UserStoppedTyping', (data: { userId: number; roomId: number }) => {
+    this.connection.on('userstoppedtyping', (data: { userId: number; roomId: number }) => {
       console.log('⌨️ User stopped typing:', data);
     });
 
     // User online status changed
-    this.connection.on('UserOnlineStatusChanged', (data: { userId: number; isOnline: boolean; roomId: number }) => {
+    this.connection.on('useronlinestatuschanged', (data: { userId: number; isOnline: boolean; roomId: number }) => {
       console.log('👤 User online status changed:', data);
     });
 
     // JoinedRoom confirmation
-    this.connection.on('JoinedRoom', (roomId: number) => {
+    this.connection.on('joinedroom', (roomId: number) => {
       console.log('✅ Server confirmed join room:', roomId);
     });
 
@@ -166,7 +174,7 @@ class ChatService {
    */
   onMessageReceived(callback: (message: ChatMessage) => void): () => void {
     this.messageCallbacks.push(callback);
-    
+
     // Return unsubscribe function
     return () => {
       this.messageCallbacks = this.messageCallbacks.filter(cb => cb !== callback);
@@ -178,7 +186,7 @@ class ChatService {
    */
   onUserTyping(callback: (data: { userId: number; userName: string; roomId: number }) => void): () => void {
     this.typingCallbacks.push(callback);
-    
+
     return () => {
       this.typingCallbacks = this.typingCallbacks.filter(cb => cb !== callback);
     };
@@ -241,7 +249,7 @@ class ChatService {
     try {
       const rooms = await this.getUserRooms(1, 100);
       const currentUserId = this.getCurrentUserId();
-      
+
       // Find ANY support room, sort by ID descending (newest first)
       // Do not restrict by createdBy, as Admin might have created it
       const supportRooms = rooms.filter(
@@ -315,13 +323,13 @@ class ChatService {
   async sendMessage(roomId: number, request: SendMessageRequest): Promise<ChatMessage> {
     try {
       const message = await apiService.post<ChatMessage>(`${CHAT_API_BASE_URL}/${roomId}`, request);
-      
+
       // Notify listeners (including self) about the sent message
       // This ensures all UI components (ChatPage, ChatWidget) stay in sync
       if (message) {
         this.notifyMessageListeners(message);
       }
-      
+
       return message;
     } catch (error) {
       console.error('Error sending message:', error);
@@ -379,11 +387,11 @@ class ChatService {
       // Based on other methods, it seems apiService.get<T> returns T.
       // Let's assume apiService.post returns the response body.
       // The backend returns { success: true, data: ChatRoomResponse }
-      
+
       if (response && response.data) {
-          return response.data;
+        return response.data;
       }
-      return response as ChatRoom; 
+      return response as ChatRoom;
     } catch (error) {
       console.error('Error getting or creating private room:', error);
       throw error;
@@ -395,10 +403,10 @@ class ChatService {
    */
   private getCurrentUserId(): number {
     // Try USER_INFO first (correct key)
-    const userStr = localStorage.getItem(STORAGE_KEYS.USER_INFO) || 
-                    localStorage.getItem('user') ||
-                    localStorage.getItem('USER');
-    
+    const userStr = localStorage.getItem(STORAGE_KEYS.USER_INFO) ||
+      localStorage.getItem('user') ||
+      localStorage.getItem('USER');
+
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
@@ -412,9 +420,9 @@ class ChatService {
   }
 
   private getCurrentUser(): any {
-    const userStr = localStorage.getItem(STORAGE_KEYS.USER_INFO) || 
-                    localStorage.getItem('user') ||
-                    localStorage.getItem('USER');
+    const userStr = localStorage.getItem(STORAGE_KEYS.USER_INFO) ||
+      localStorage.getItem('user') ||
+      localStorage.getItem('USER');
     if (userStr) {
       try {
         return JSON.parse(userStr);
@@ -435,12 +443,12 @@ class ChatService {
         stars,
         comment: comment || null
       };
-      
+
       // Thêm examId nếu có
       if (examId) {
         payload.examId = typeof examId === 'string' ? parseInt(examId, 10) : examId;
       }
-      
+
       const response = await apiService.post(FEEDBACK_API_BASE_URL, payload);
       // apiService.post trả về response.data hoặc response tùy cấu hình
       // Kiểm tra nếu có success field

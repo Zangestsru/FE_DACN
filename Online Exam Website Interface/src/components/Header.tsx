@@ -36,6 +36,8 @@ export const Header: React.FC<HeaderProps> = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // State MỚI cho mobile search overlay
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  // State cho search input header
+  const [headerSearchQuery, setHeaderSearchQuery] = useState('');
   // Desktop: bỏ chế độ mở rộng thanh tìm kiếm để tránh layout bị nhảy sang bên
   // State cho user dropdown
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -189,7 +191,23 @@ export const Header: React.FC<HeaderProps> = ({
 
 
 
-  // Hàm MỚI: Xử lý nhấp chuột trên menu di động (để đóng menu sau khi nhấp)
+  // Hàm xử lý search submit
+  const handleSearchSubmit = () => {
+    if (headerSearchQuery.trim()) {
+      navigate(`/certification-exams?q=${encodeURIComponent(headerSearchQuery.trim())}`);
+      // Nếu đang ở mobile thì đóng search overlay
+      setIsMobileSearchOpen(false);
+    }
+  };
+
+  // Hàm xử lý search enter key
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit();
+    }
+  };
+
+  // Hàm xử lý nhấp chuột trên menu di động (để đóng menu sau khi nhấp)
   const handleMobileNavClick = (callback: () => void) => {
     callback();
     toggleMobileMenu();
@@ -256,28 +274,38 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Phía phải (Desktop) */}
             <div className="header-right">
               {/* Search (Desktop) - giữ nguyên tại chỗ, không mở rộng khi click */}
-              <div className="search-container-header" style={{ width: '180px' }}>
+              <div className="search-container-header" style={{ width: '250px' }}>
                 <div className="position-relative w-100">
                   <input 
                     type="search" 
                     className="form-control search-input-header w-100" 
                     placeholder="Tìm kiếm..."
+                    value={headerSearchQuery}
+                    onChange={(e) => setHeaderSearchQuery(e.target.value)}
+                    onKeyDown={handleSearchKeyDown}
                     style={{
                       backgroundColor: 'rgba(255, 255, 255, 0.15)',
                       border: '1px solid rgba(255, 255, 255, 0.3)',
                       color: 'white',
-                      cursor: 'text'
+                      cursor: 'text',
+                      paddingRight: '40px'
                     }}
                   />
                   <button 
                     className="search-btn-header"
                     type="button"
+                    onClick={handleSearchSubmit}
                     style={{
                       position: 'absolute',
                       right: '8px',
                       top: '50%',
                       transform: 'translateY(-50%)',
-                      color: 'rgba(255, 255, 255, 0.7)'
+                      color: 'rgba(255, 255, 255, 0.7)',
+                      background: 'none',
+                      border: 'none',
+                      padding: '4px',
+                      cursor: 'pointer',
+                      zIndex: 2
                     }}
                     aria-label="Tìm kiếm"
                   >
@@ -479,7 +507,20 @@ export const Header: React.FC<HeaderProps> = ({
                     placeholder="Tìm kiếm..." 
                     autoFocus
                     className="mobile-search-input-inline"
+                    value={headerSearchQuery}
+                    onChange={(e) => setHeaderSearchQuery(e.target.value)}
+                    onKeyDown={handleSearchKeyDown}
                   />
+                  <button 
+                    className="mobile-search-close-inline"
+                    onClick={handleSearchSubmit}
+                    aria-label="Tìm kiếm"
+                    style={{ right: '40px' }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                  </button>
                   <button 
                     className="mobile-search-close-inline"
                     onClick={toggleMobileSearch}

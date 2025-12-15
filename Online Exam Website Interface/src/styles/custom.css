@@ -845,19 +845,24 @@ html {
 
 .card-header-info {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: flex-start;
   margin-bottom: 16px;
+  gap: 12px;
 }
 
-.card-title {
+.exam-card-enhanced .card-title {
   font-size: 1.25rem;
   font-weight: 700;
   color: #1e293b;
   line-height: 1.3;
   margin: 0;
-  flex: 1;
-  margin-right: 16px;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .difficulty-pill {
@@ -884,12 +889,17 @@ html {
   color: #991b1b;
 }
 
-.card-description {
+.exam-card-enhanced .card-description {
   color: #64748b;
   font-size: 15px;
   line-height: 1.6;
   margin-bottom: 20px;
   flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .exam-specs {

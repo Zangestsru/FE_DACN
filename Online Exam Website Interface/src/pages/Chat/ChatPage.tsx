@@ -24,7 +24,7 @@ import {
 } from '@mui/material';
 
 // Fallback icons if @mui/icons-material not available
-import { BiSend, BiSearch, BiSupport } from 'react-icons/bi';
+import { BiSend, BiSearch, BiSupport, BiArrowBack } from 'react-icons/bi';
 
 const ChatPage: React.FC = () => {
   const { targetUserId, roomId } = useParams<{ targetUserId: string; roomId: string }>();
@@ -39,6 +39,9 @@ const ChatPage: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [isSupportActive, setIsSupportActive] = useState(false);
   const [rooms, setRooms] = useState<ChatRoom[]>([]);
+  
+  // Mobile responsive state
+  const [showMobileList, setShowMobileList] = useState(true);
   
   // Refs for scrolling and typing
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -89,6 +92,10 @@ const ChatPage: React.FC = () => {
     if (activeRoom) {
       // Ensure we join the SignalR group for real-time updates
       chatService.joinRoom(activeRoom.roomId).catch(console.error);
+      // On mobile, hide list when room is active
+      setShowMobileList(false);
+    } else {
+      setShowMobileList(true);
     }
   }, [activeRoom]);
 
@@ -390,7 +397,10 @@ const ChatPage: React.FC = () => {
       <Container maxWidth="xl" sx={{ height: '100%' }}>
         <Grid container spacing={2} sx={{ height: '100%' }}>
           {/* Sidebar */}
-          <Grid item xs={12} md={4} sx={{ height: '100%' }}>
+          <Grid item xs={12} md={4} sx={{ 
+            height: '100%',
+            display: { xs: showMobileList ? 'block' : 'none', md: 'block' }
+          }}>
             <Paper elevation={2} sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', borderRadius: 2 }}>
               <Box sx={{ p: 2, borderBottom: '1px solid #eee' }}>
                 <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>Đoạn chat</Typography>
@@ -532,12 +542,21 @@ const ChatPage: React.FC = () => {
           </Grid>
 
           {/* Chat Window */}
-          <Grid item xs={12} md={8} sx={{ height: '100%' }}>
+          <Grid item xs={12} md={8} sx={{ 
+            height: '100%',
+            display: { xs: !showMobileList ? 'block' : 'none', md: 'block' }
+          }}>
             <Paper elevation={2} sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 2, overflow: 'hidden' }}>
               {activeRoom ? (
                 <>
                   {/* Chat Header */}
                   <Box sx={{ p: 2, borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', bgcolor: '#fff' }}>
+                    <IconButton 
+                      onClick={() => setShowMobileList(true)}
+                      sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}
+                    >
+                      <BiArrowBack />
+                    </IconButton>
                     <Avatar 
                       src={isSupportActive ? undefined : (users.find(u => String(u.id) === targetUserId)?.avatar)}
                       sx={{ bgcolor: isSupportActive ? '#1976d2' : '#bdbdbd', mr: 2 }}

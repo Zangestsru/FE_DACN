@@ -33,7 +33,7 @@ export const OTPModal: React.FC<OTPModalProps> = ({ type, contact, onClose, onVe
 
   const handleOtpChange = (index: number, value: string) => {
     if (value.length > 1) return;
-    
+
     const newOtp = [...otpCode];
     newOtp[index] = value;
     setOtpCode(newOtp);
@@ -74,18 +74,18 @@ export const OTPModal: React.FC<OTPModalProps> = ({ type, contact, onClose, onVe
     }
   };
 
-  const maskedContact = type === 'phone' 
+  const maskedContact = type === 'phone'
     ? contact.replace(/(\d{3})\d{4}(\d{3})/, '$1****$2')
     : contact.replace(/(.{2})[^@]*(@.*)/, '$1***$2');
 
   return (
     <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content border-0 shadow-lg">
+      <div className="modal-dialog modal-dialog-centered modal-sm">
+        <div className="modal-content border-0 shadow-lg" style={{ maxWidth: '360px', margin: '0 auto' }}>
           <div className="modal-header bg-primary text-white border-0">
             <h5 className="modal-title d-flex align-items-center">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="me-2" style={{ display: 'none' }}>
-                <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z"/>
+                <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
               </svg>
               XÁC THỰC OTP
             </h5>
@@ -99,8 +99,8 @@ export const OTPModal: React.FC<OTPModalProps> = ({ type, contact, onClose, onVe
             )}
             <div className="mb-4">
               <div className="mb-3">
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="#007bff" className="mx-auto" style={{ display: 'none' }}>
-                  <path d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z"/>
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="#007bff" className="mx-auto" style={{ display: 'none' }}>
+                  <path d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z" />
                 </svg>
               </div>
               <h6>Nhập mã xác thực</h6>
@@ -129,10 +129,10 @@ export const OTPModal: React.FC<OTPModalProps> = ({ type, contact, onClose, onVe
                   />
                 ))}
               </div>
-              
+
               <div className="text-center">
                 {canResend ? (
-                  <button 
+                  <button
                     className="btn btn-link p-0 text-decoration-none"
                     onClick={handleResend}
                   >
@@ -147,12 +147,12 @@ export const OTPModal: React.FC<OTPModalProps> = ({ type, contact, onClose, onVe
             </div>
 
             <div className="d-grid gap-2">
-              <button 
+              <button
                 className="btn btn-primary btn-lg"
                 onClick={handleVerify}
                 disabled={otpCode.join('').length !== 6 || !!loading}
               >
-                {loading ? 'Đang xác thực...' : '✅ Xác thực'}
+                {loading ? 'Đang xác thực...' : 'Xác thực'}
               </button>
               <button className="btn btn-outline-secondary" onClick={onClose}>
                 Hủy bỏ

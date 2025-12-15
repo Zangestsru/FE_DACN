@@ -63,10 +63,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onCertificationClick }) => {
       {/* Hero Section */}
       <section className="hero-section hero-gradient position-relative">
         <div className="container-fluid py-5">
-          <div className="row align-items-center min-vh-75">
+          <div className="row align-items-center min-vh-50 min-vh-lg-75">
             <div className="col-lg-6 col-md-12 order-2 order-lg-1">
               <div className="hero-content text-white px-3 px-md-4 text-center text-lg-start">
-                <h1 className="display-5 display-lg-4 fw-bold mb-4">
+                <h1 className="display-6 display-md-5 display-lg-4 fw-bold mb-4">
                   Luyện thi trắc nghiệm online – Nhanh chóng, chính xác, tiện lợi
                 </h1>
                 <p className="lead mb-4 opacity-90">

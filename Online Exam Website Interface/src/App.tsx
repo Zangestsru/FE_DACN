@@ -76,6 +76,11 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Check if current page is a full-screen page (no header/footer)
+  const isFullScreenPage = location.pathname.startsWith('/study-lesson/');
+  // Exam taking page should show Header but hide Footer, and handle its own layout (no default main-content padding)
+  const isExamTakingPage = location.pathname.startsWith('/exam-taking/');
+
   const handleOTPVerification = (type: string, contact: string) => {
     setOTPData({ 
       type, 
@@ -86,23 +91,27 @@ function AppContent() {
   };
 
   return (
-    <div className="min-vh-100" style={{ backgroundColor: '#f8f9fa' }}>
+    <div className={isFullScreenPage ? "" : "min-vh-100"} style={isFullScreenPage ? {} : { backgroundColor: '#f8f9fa' }}>
       <Toaster position="top-right" richColors />
       <ScrollToTop />
-      <Header 
-        onCertificationClick={() => navigate('/certification-exams')}
-        onStudyClick={() => navigate('/study-materials')}
-        onHomeClick={() => navigate('/home')}
-        onLoginClick={() => navigate('/login')}
-        onRegisterClick={() => navigate('/register')}
-        onProfileClick={() => navigate('/profile')}
-        onChatClick={() => navigate('/chat')}
-        onPaymentHistoryClick={() => navigate('/payment-history')}
-        onPurchasedExamsClick={() => navigate('/purchased-exams')}
-        onEnrolledCoursesClick={() => navigate('/enrolled-courses')}
-        onExamHistoryClick={() => navigate('/exam-history')}
-      />
-      <main className='main-content'>
+      {/* Show Header for normal pages, hide for ExamTaking and FullScreen pages */}
+      {(!isFullScreenPage && !isExamTakingPage) && (
+        <Header 
+          onCertificationClick={() => navigate('/certification-exams')}
+          onStudyClick={() => navigate('/study-materials')}
+          onHomeClick={() => navigate('/home')}
+          onLoginClick={() => navigate('/login')}
+          onRegisterClick={() => navigate('/register')}
+          onProfileClick={() => navigate('/profile')}
+          onChatClick={() => navigate('/chat')}
+          onPaymentHistoryClick={() => navigate('/payment-history')}
+          onPurchasedExamsClick={() => navigate('/purchased-exams')}
+          onEnrolledCoursesClick={() => navigate('/enrolled-courses')}
+          onExamHistoryClick={() => navigate('/exam-history')}
+        />
+      )}
+      {/* ExamTaking handles its own padding/layout to accommodate fixed header */}
+      <main className={(isFullScreenPage || isExamTakingPage) ? '' : 'main-content'}>
         <Routes>
           <Route path="/" element={<HomePage onCertificationClick={() => navigate('/certification-exams')} />} />
           <Route path="/home" element={<HomePage onCertificationClick={() => navigate('/certification-exams')} />} />
@@ -121,12 +130,12 @@ function AppContent() {
           <Route path="/exam-detail/:examId" element={<ExamDetail onBackToList={() => navigate('/certification-exams')} onRegister={(examId) => { const slug = 'exam'; navigate(`/payment/${slug}/${examId}`); }} onStartExam={(examId) => { const slug = 'exam'; navigate(`/exam-start/${slug}/${examId}`); }} />} />
           <Route path="/payment/:slug/:examId" element={<ProtectedRoute element={<Payment onPaymentSuccess={(examId, slug) => navigate(`/exam-start/${slug}/${examId}`)} onCancel={() => navigate(-1)} />} />} />
           <Route path="/exam-start/:slug/:examId" element={<ProtectedRoute element={<ExamStart onCancel={() => navigate(-1)} />} />} />
-          <Route path="/exam-taking/:slug/:attemptId" element={<ProtectedRoute element={<div style={{ minHeight: '100vh', height: 'auto' }}><ExamTaking onSubmitExam={(result) => { 
+          <Route path="/exam-taking/:slug/:attemptId" element={<ProtectedRoute element={<ExamTaking onSubmitExam={(result) => { 
             setExamResult(result); 
             const currentSlug = location.pathname.split('/')[2] || 'exam'; 
             const attemptId = result?.examAttemptId || location.pathname.split('/')[3] || '1';
             navigate(`/exam-result/${currentSlug}/${attemptId}`); 
-          }} /></div>} />} />
+          }} />} />} />
           <Route path="/exam-result/:slug/:attemptId" element={<ProtectedRoute element={<ExamResult onBackToHome={() => navigate('/')} />} />} />
           <Route path="/exam-start" element={<ExamStart />} />
           <Route path="/chat" element={<ProtectedRoute element={<ChatPage />} />} />
@@ -157,7 +166,7 @@ function AppContent() {
           />
         </Routes>
       </main>
-      <Footer />
+      {!isFullScreenPage && !isExamTakingPage && <Footer />}
       <ChatWidget isVisible={true} />
       {showOTPModal && (
         <OTPModal

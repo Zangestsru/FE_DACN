@@ -1,0 +1,10 @@
+﻿{
+    "Description":  "Tạo 1 câu hỏi trắc nghiệm C++ về OOP",
+    "SubjectId":  1,
+    "OptionsCount":  4,
+    "Difficulty":  "Medium",
+    "Marks":  1,
+    "CorrectCount":  1,
+    "Tags":  "c++,oop",
+    "QuestionType":  "MultipleChoice"
+}

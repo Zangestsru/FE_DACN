@@ -15,7 +15,7 @@ interface ExamDetailProps {
 }
 
 export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister, onStartExam }) => {
-  const [showPromoModal, setShowPromoModal] = useState(false);
+
   const [hasPurchased, setHasPurchased] = useState<boolean>(false);
   const [hasCompleted, setHasCompleted] = useState<boolean>(false);
   const [checkingEligibility, setCheckingEligibility] = useState<boolean>(true);
@@ -27,7 +27,7 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
 
   // Sử dụng hook để lấy chi tiết exam từ URL params
   const { data: examDetailData, loading, error } = useExamDetail(examId as string);
-  
+
   // Lấy kết quả thi của user
   const { data: examResults } = useMyExamResults();
 
@@ -47,7 +47,7 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
       setCheckingEligibility(true);
       try {
         const examIdNum = parseInt(examId, 10);
-        
+
         // 2. Kiểm tra đã thi (có exam result cho exam này) - check trước vì nếu đã thi thì chắc chắn đã mua
         const hasResult = examResults?.some((result: any) => {
           const resultExamId = result.examId ?? result.ExamId ?? result.exam?.examId ?? result.exam?.ExamId;
@@ -68,13 +68,13 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
         const hasPayment = payments.some((p: any) => {
           // Kiểm tra payment success
           if (p.status !== 'success') return false;
-          
+
           // Kiểm tra nếu payment có examId (nếu backend trả về)
           const paymentData = p as any;
           if (paymentData.examId === examIdNum || String(paymentData.examId) === String(examId)) {
             return true;
           }
-          
+
           // Nếu không có examId trực tiếp, có thể check từ orderId hoặc payload
           // Tạm thời: nếu có payment success gần đây và exam là có phí thì coi như đã mua
           // (Logic này có thể cải thiện khi backend trả về examId trong payment data)
@@ -103,7 +103,7 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
   // Load feedback cho exam này
   const loadFeedback = async () => {
     if (!examId) return;
-    
+
     setLoadingFeedback(true);
     try {
       // Lấy feedback của user hiện tại (chỉ khi đã đăng nhập)
@@ -169,14 +169,7 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
     return sum / allFeedbacks.length;
   }, [allFeedbacks]);
 
-  useEffect(() => {
-    // Show promo modal after 2 seconds
-    const timer = setTimeout(() => {
-      setShowPromoModal(true);
-    }, 2000);
 
-    return () => clearTimeout(timer);
-  }, []);
 
   // Loading state
   if (loading) {
@@ -226,7 +219,7 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
       <div className="row">
         <div className="col-12">
           {/* Header */}
-          <div className="d-flex justify-content-between align-items-center mb-4 exam-detail-header">
+          <div className="d-flex justify-content-between align-items-center mb-4 exam-detail-header flex-wrap gap-3">
             <button className="btn btn-outline-primary" onClick={onBackToList}>
               ← Quay lại danh sách
             </button>
@@ -244,9 +237,9 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
                   style={{ height: '300px', objectFit: 'cover' }}
                 />
                 <div className="card-body">
-                  <div className="d-flex justify-content-between align-items-start mb-3 exam-detail-titlebar">
+                  <div className="d-flex justify-content-between align-items-start mb-3 exam-detail-titlebar flex-wrap gap-2">
                     <div>
-                      <h2 className="card-title">{exam.title}</h2>
+                      <h2 className="card-title h3">{exam.title}</h2>
                       {/* Hiển thị số sao trung bình */}
                       <div className="mt-2">
                         {averageRating > 0 && allFeedbacks.length > 0 ? (
@@ -301,9 +294,9 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
                           {(() => {
                             // Calculate passingMark from passingScore percentage
                             // If passingMark exists, use it; otherwise calculate from passingScore and totalQuestions
-                            const passingMark = (exam as any).passingMark || 
-                              (exam.passingScore && exam.questions 
-                                ? Math.ceil((exam.passingScore / 100) * exam.questions) 
+                            const passingMark = (exam as any).passingMark ||
+                              (exam.passingScore && exam.questions
+                                ? Math.ceil((exam.passingScore / 100) * exam.questions)
                                 : exam.passingScore || 0);
                             return passingMark;
                           })()} điểm
@@ -396,9 +389,9 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
                       <small className="fw-bold" style={{ color: '#1a4b8c' }}>
                         {(() => {
                           // Calculate passingMark from passingScore percentage
-                          const passingMark = (exam as any).passingMark || 
-                            (exam.passingScore && exam.questions 
-                              ? Math.ceil((exam.passingScore / 100) * exam.questions) 
+                          const passingMark = (exam as any).passingMark ||
+                            (exam.passingScore && exam.questions
+                              ? Math.ceil((exam.passingScore / 100) * exam.questions)
                               : exam.passingScore || 0);
                           return `${passingMark} điểm`;
                         })()}
@@ -427,9 +420,9 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
                   </div>
 
                   <div className="d-grid gap-3 exam-detail-actions mt-4">
-                    <button 
+                    <button
                       className="btn btn-lg fw-bold"
-                      style={{ 
+                      style={{
                         backgroundColor: '#1a4b8c',
                         color: 'white',
                         border: 'none',
@@ -446,9 +439,9 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
                     >
                       Đăng ký thi ngay
                     </button>
-                    <button 
+                    <button
                       className="btn btn-lg fw-bold w-100"
-                      style={{ 
+                      style={{
                         backgroundColor: '#1a4b8c',
                         color: 'white',
                         border: 'none',
@@ -459,7 +452,7 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
                       onClick={() => {
                         window.dispatchEvent(new CustomEvent('open-chat-widget', {
                           detail: {
-                            targetUserId: exam.createdById,
+                            // targetUserId: exam.createdById, // Bỏ dòng này để chat với Admin (Support Room)
                             initialMessage: `Tôi muốn được tư vấn về bài thi "${exam.title}"`
                           }
                         }));
@@ -517,11 +510,11 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
                             const comment = fb.comment ?? fb.Comment;
                             const userName = fb.userName ?? fb.UserName ?? 'Người dùng';
                             const createdAt = fb.createdAt ?? fb.CreatedAt;
-                            
+
                             return (
-                              <div 
+                              <div
                                 key={fb.feedbackId ?? fb.FeedbackId ?? index}
-                                className="p-3 rounded-3" 
+                                className="p-3 rounded-3"
                                 style={{ backgroundColor: '#f8f9fa', border: '1px solid #dee2e6' }}
                               >
                                 <div className="d-flex justify-content-between align-items-start mb-2">
@@ -555,8 +548,8 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
                         }
                         return true;
                       }).length === 0 && (
-                        <p className="text-muted text-center py-3">Chưa có đánh giá nào từ người dùng khác.</p>
-                      )}
+                          <p className="text-muted text-center py-3">Chưa có đánh giá nào từ người dùng khác.</p>
+                        )}
                     </div>
                   )}
 
@@ -599,81 +592,7 @@ export const ExamDetail: React.FC<ExamDetailProps> = ({ onBackToList, onRegister
         </div>
       </div>
 
-      {/* Promo Modal */}
-      {showPromoModal && (
-        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content border-0 shadow-lg">
-              <div className="modal-header border-0 d-flex justify-content-center align-items-center position-relative" style={{ backgroundColor: '#1a4b8c' }}>
-                <h5 className="modal-title text-white mb-0">
-                  ÔN TẬP HIỆU QUẢ
-                </h5>
-                <button 
-                  type="button" 
-                  className="btn-close btn-close-white position-absolute" 
-                  style={{ right: '1rem' }}
-                  onClick={() => setShowPromoModal(false)}
-                ></button>
-              </div>
-              <div className="modal-body p-4 text-center">
-                <div className="mb-4">
-                  <div className="mb-3">
-                    <img 
-                      src="https://images.unsplash.com/photo-1758685848208-e108b6af94cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvbmxpbmUlMjBsZWFybmluZyUyMHN0dWR5JTIwcHJlcGFyYXRpb258ZW58MXx8fHwxNzU5MTQ0NDc3fDA&ixlib=rb-4.1.0&q=80&w=1080"
-                      alt="Ôn tập VIP"
-                      className="img-fluid rounded"
-                      style={{ height: '120px', width: '200px', objectFit: 'cover' }}
-                    />
-                  </div>
-                  <h4>Gói ôn tập VIP</h4>
-                  <p className="text-muted">Tăng 85% cơ hội đạt chứng chỉ ngay lần đầu</p>
-                </div>
 
-                <div className="row text-center mb-4">
-                  <div className="col-6">
-                    <div className="p-3 bg-light rounded">
-                      <div className="fw-bold">500+</div>
-                      <small>Câu hỏi thực tế</small>
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="p-3 bg-light rounded">
-                      <div className="fw-bold">20h</div>
-                      <small>Video giảng dạy</small>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="text-center mb-4">
-                  <div className="h4 text-danger">
-                    <del>2,000,000đ</del>
-                    <span className="ms-2 text-success">990,000đ</span>
-                  </div>
-                  <div className="text-success fw-bold">Tiết kiệm 50%!</div>
-                </div>
-
-                <div className="d-grid gap-2">
-                  <button className="btn btn-lg text-white" style={{ backgroundColor: '#1a4b8c' }}>
-                    Mua gói ôn tập ngay
-                  </button>
-                  <button 
-                    className="btn btn-outline-secondary"
-                    onClick={() => setShowPromoModal(false)}
-                  >
-                    Để sau
-                  </button>
-                </div>
-
-                <div className="mt-3">
-                  <small className="text-muted">
-                    Ưu đãi có hạn - Chỉ còn 3 ngày
-                  </small>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

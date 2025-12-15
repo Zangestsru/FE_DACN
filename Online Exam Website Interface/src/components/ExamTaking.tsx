@@ -1421,9 +1421,9 @@ export const ExamTaking: React.FC<ExamTakingProps> = ({ onSubmitExam }) => {
   console.log('🎨 Exam title:', exam.title);
 
   return (
-    <div className="exam-taking-container d-flex exam-taking-root" style={{ minHeight: '100vh', height: 'auto', overflow: 'hidden' }}>
+    <div className="exam-taking-container d-flex exam-taking-root">
       {/* Sidebar */}
-      <div className="exam-sidebar bg-light border-end exam-taking-sidebar d-none d-lg-block" style={{ width: '300px', position: 'sticky', top: 0, height: '100vh', overflow: 'auto', zIndex: 1040 }}>
+      <div className="exam-sidebar bg-light border-end exam-taking-sidebar d-none d-lg-block">
         <div className="p-3 border-bottom">
           <h6 className="mb-0 text-center">THÔNG TIN BÀI THI</h6>
         </div>
@@ -1531,67 +1531,40 @@ export const ExamTaking: React.FC<ExamTakingProps> = ({ onSubmitExam }) => {
       </div>
 
       {/* Main Content */}
-      <div className="exam-content flex-grow-1 d-flex flex-column exam-taking-content" style={{ minHeight: '100vh', height: 'auto' }}>
-        {/* Add responsive margin for mobile */}
-        <style>{`
-          @media (max-width: 991px) {
-            .exam-taking-content {
-              margin-left: 0 !important;
-            }
-          }
-          .exam-taking-container {
-            position: relative;
-          }
-          .exam-taking-sidebar {
-            position: sticky !important;
-            top: 0;
-            z-index: 1040 !important;
-            height: 100vh;
-            overflow-y: auto;
-          }
-          .exam-taking-main {
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
-          }
-          /* Ensure footer is below sidebar */
-          footer {
-            position: relative;
-            z-index: 1030 !important;
-          }
-        `}</style>
-        {/* Desktop Header */}
-        <div className="p-4 border-bottom bg-white d-none d-lg-block" style={{ position: 'relative', zIndex: 1 }}>
-          <div className="d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">{exam.title}</h5>
+      <div className="exam-content flex-grow-1 d-flex flex-column exam-taking-content">
+        {/* Desktop Header - Exam Title & Progress */}
+        <div className="d-none d-lg-block exam-taking-header">
+          <div className="d-flex justify-content-between align-items-center full-bleed">
+            <h5 className="mb-0 text-primary fw-bold">{exam.title}</h5>
             <div className="d-flex align-items-center gap-3">
               <span
-                className="badge"
+                className="badge rounded-pill"
                 style={{
                   backgroundColor: '#0073e6',
                   color: 'white',
-                  fontSize: '20px',
-                  padding: '10px 16px',
+                  fontSize: '16px',
+                  padding: '8px 16px',
                   fontWeight: '600'
                 }}
               >
                 Câu {currentQuestion + 1}/{questions.length}
               </span>
               <button
-                className={`btn ${flaggedQuestions.has(currentQuestion) ? 'btn-danger' : 'btn-outline-secondary'}`}
+                className={`btn btn-sm ${flaggedQuestions.has(currentQuestion) ? 'btn-danger' : 'btn-outline-secondary'}`}
                 onClick={() => toggleQuestionFlag(currentQuestion)}
                 style={{
                   fontWeight: '500',
-                  fontSize: '16px',
+                  fontSize: '14px',
                   padding: '6px 12px'
                 }}
               >
-                Đánh dấu
+                {flaggedQuestions.has(currentQuestion) ? 'Đã đánh dấu' : 'Đánh dấu'}
               </button>
             </div>
           </div>
         </div>
 
-        <div className="flex-grow-1 p-3 p-lg-4 bg-light overflow-auto exam-taking-main">
+        <div className="exam-taking-main">
           {/* Mobile Exam Title */}
           <div className="d-lg-none mb-3">
             <h6 className="text-primary fw-bold mb-2">{exam.title}</h6>
@@ -1606,19 +1579,22 @@ export const ExamTaking: React.FC<ExamTakingProps> = ({ onSubmitExam }) => {
           </div>
 
           {/* Question */}
-          <div className="mb-4">
-            <h4 className="mb-3 d-none d-lg-block" style={{
-              fontFamily: '"Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif',
-              fontWeight: '600',
-              color: '#2c3e50'
-            }}>
-              Câu {currentQuestion + 1}:
+          <div className="mb-3">
+            <div className="d-flex align-items-center mb-3">
+              <h4 className="mb-0 me-3" style={{
+                fontFamily: '"Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif',
+                fontWeight: '700',
+                color: '#2c3e50',
+                minWidth: 'fit-content'
+              }}>
+                Câu {currentQuestion + 1}:
+              </h4>
               {questions[currentQuestion]?.type === 'multiple-select' && (
-                <span className="badge bg-info ms-2" style={{ fontSize: '12px' }}>
+                <span className="badge bg-info text-dark" style={{ fontSize: '12px' }}>
                   Chọn nhiều đáp án
                 </span>
               )}
-            </h4>
+            </div>
 
             {/* Mobile Question Title */}
             <h5 className="mb-3 d-lg-none" style={{
@@ -1657,8 +1633,8 @@ export const ExamTaking: React.FC<ExamTakingProps> = ({ onSubmitExam }) => {
           </div>
 
           {/* Options */}
-          <div className="mb-5">
-            <div className="row g-2 g-lg-3">
+          <div className="mb-5 full-bleed">
+            <div className="row g-2 g-lg-3 full-bleed">
               {questions[currentQuestion]?.options.map((option, index) => {
                 const currentQuestionData = questions[currentQuestion];
                 const isMultipleSelect = currentQuestionData?.type === 'multiple-select';

@@ -1,7 +1,9 @@
 
 import { createRoot } from "react-dom/client";
+import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App.tsx";
 import "./index.css";
+import "./styles/custom.css";
 import "./styles/responsive-utils.css";
 import "./styles/responsive-fixes.css";
 import "./styles/no-icons.css";
